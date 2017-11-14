@@ -16,12 +16,13 @@
 		<!-- Stylesheets
     ================================================== -->
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link href="https://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 		<!-- Favicon
     ================================================== -->
    	<link rel="icon" type="image/png" href="favicon.png" />
 		<!-- Icons & Fonts
 		================================================== -->
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/font-awesome.css">
 		<link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700|Playfair+Display:400,400i,700i" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -32,7 +33,7 @@
 
   <body>
 
-  <div id="layout">
+  <div id="layout" class="">
       <!-- Menu toggle -->
       <a href="#menu" id="menuLink" class="menu-link">
           <!-- Icon -->
@@ -40,7 +41,7 @@
           <span>SH</span>
       </a>
 
-      <div id="menu">
+      <div id="menu" class="">
 
           <div class="pure-menu">
 
@@ -57,16 +58,16 @@
                     </li>
 
                     <li id="op2" class="pure-menu-item top-ln">
-                      <a href="#" class="pure-menu-link" onclick="menuClick(2)">Profile</a>
+                      <a href="#" class="pure-menu-link" onclick="menuClick(2)">Profile <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                     </li>
 
-                    <li id="op3" class="pure-menu-item bottom-ln">
-                        <a href="#" class="pure-menu-link" onclick="menuClick(3)">Logout</a>
+                    <li id="op3" class="pure-menu-item top-ln">
+                        <a href="login.html" class="pure-menu-link" onclick="menuClick(3)">Logout</a>
                     </li>
 
-                    <!-- <li id="op4" class="pure-menu-item bottom-ln">
-                      <a href="#" class="pure-menu-link" onclick="menuClick(4)">Contact</a>
-                    </li> -->
+                    <li id="op4" class="pure-menu-item bottom-ln">
+                      <a href="#" class="pure-menu-link locked-link" onclick="menuClick(4)">Live! <i class="fa fa-lock" aria-hidden="true"></i></a>
+                    </li>
                 </ul>
 
               </div>
@@ -77,11 +78,95 @@
 
         <h1 class="header-main-type">Dashboard</h1>
 
+				<div class="container-fluid notif-con">
+					<div class="row">
+
+						<div class="col-md-12">
+							<h3 class="header-sub-type">Welcome, Albert!</h3>
+							<p class="descrip-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempor purus lacus, et molestie erat accumsan vitae. Quisque ornare, eros ac finibus imperdiet, mi tortor tristique est, vitae laoreet erat nisl facilisis mi. Fusce condimentum mi dui, ut viverra velit gravida id.</p>
+						</div>
+
+						<div class="col-md-12 notif top-margin">
+							<p class="notif-txt">Your Status: <span class="status">ACCEPTED</span></p>
+						</div>
+
+						<div class="col-md-12 top-margin descrip-txt">
+							Let us know if you're coming by confirming your spot! Please remember to update
+							your status if you decide you cannot attend.
+						</div>
+
+						<div class="row">
+							<div class="col-md-6 top-margin">
+								<button class="button green">
+									<p>Confirm my spot!</p>
+								</button>
+							</div>
+
+							<div class="col-md-6 top-margin">
+								<button class="button dark">
+									<p>I can't go <i class="fa fa-frown-o" aria-hidden="true"></i></p>
+								</button>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+
       </div>
 
       <div id="info" class="hide">
 
         <h1 class="header-main-type">Profile</h1>
+
+				<div class="container-fluid notif-con">
+					<div class="row">
+
+						<div class="col-md-12">
+							<!-- <h3 class="header-sub-type">Welcome, Albert!</h3> -->
+							<p class="descrip-txt">
+								Congratulations on being accepted! Please let us know
+								a few more things so we can make your experience better during
+								the hackathon.
+							</p>
+						</div>
+
+						<div class="row">
+							<form id="profileForm" class="" autocomplete="off">
+								<div class="col-md-6 top-margin">
+									<label class="form-lbl" for="q1" name="">T-Shirt Size</label>
+									<input class="form-field" id="q1" name="q1" type="text" placeholder="Medium" required/>
+								</div>
+
+								<div class="col-md-6 top-margin">
+									<label class="form-lbl" for="q1" name="">Dietary Restrictions</label>
+									<input class="form-field" id="q1" name="q1" type="text" placeholder="Halal" required/>
+								</div>
+
+								<div class="col-md-12 top-margin">
+									<label class="form-lbl" for="q1" name="">Anything else we should know?</label>
+									<input class="form-field" id="q1" name="q1" type="text" placeholder="" required/>
+								</div>
+							</form>
+
+						</div>
+
+						<div class="col-md-12 top-margin descrip-txt">
+							Let us know if you're coming by confirming your spot! Please remember to update
+							your status if you decide you cannot attend. This is just filler text.
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 top-margin">
+								<button class="button green">
+									<p>Update Info</p>
+								</button>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
 
       </div>
 
@@ -105,6 +190,11 @@
   <script>
 
     function menuClick(item) {
+
+			$("#layout").removeClass("active");
+			$("#menu").removeClass("active");
+			$("#menuLink").removeClass("active");
+
 
       // Hiding and showing the appropriate info
       if (item === 1) {
@@ -133,6 +223,8 @@
 
         $("#info").addClass("show");
         $("#info").removeClass("hide");
+
+				$(".fa-exclamation-triangle").addClass("hide");
 
         $("#login").addClass("hide");
         $("#login").removeClass("show");

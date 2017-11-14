@@ -1,5 +1,6 @@
 #layout,
 #menu,
+#menuLogin,
 .menu-link {
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
@@ -34,6 +35,8 @@
   background: #34B1E1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /*border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;*/
 }
 
 #menu a {
@@ -111,6 +114,12 @@
   margin: 0;
 }
 
+#menuLogin .pure-menu-heading {
+  font-size: 110%;
+  color: #fff;
+  margin: 0;
+}
+
 .top-ln {
   border-top-style: solid;
   border-top-color: #6DBFE7;
@@ -127,10 +136,17 @@
   border-bottom-width: 1px;
 }
 
-#logo {
+#menu #logo {
   width: 100%;
   padding-left: 20px;
   padding-right: 20px;
+  padding-top: 6em;
+}
+
+#menuLogin #logo {
+  width: 100%;
+  padding-left: 100px;
+  padding-right: 100px;
   padding-top: 6em;
 }
 
@@ -187,6 +203,9 @@
 
 #menu .pure-menu-list .pure-menu-selected {
   background: #6DBFE7;
+  /*border-left-style: solid;
+  border-left-width: 4px;
+  border-left-color: white;*/
 }
 
 .hide {
@@ -218,7 +237,157 @@
   margin-top: 2em;
 }
 
+.header-sub-type {
+  width: 100%;
+  color: #333333;
+  font-size: 2em;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.descrip-txt {
+  width: 100%;
+  color: #333333;
+  font-size: 1.1em;
+  line-height: 1.6em;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.fa {
+  margin-left: 2px;
+}
+
+.locked-link {
+  cursor: not-allowed !important;
+}
+
+.notif {
+  padding-top: 0.1px !important;
+  height: 50px;
+  border-radius: 6px;
+  border-left-style: solid;
+  border-left-width: 4px;
+  border-left-color: #1C3444;
+  width: 100%;
+  background: #f3f3f3;
+}
+
+.button {
+  padding-top: 0.1px !important;
+  height: 50px;
+  border-radius: 6px;
+  width: 100%;
+  border: none;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button p {
+  color: white;
+  margin-top: 14px;
+  font-size: 1.2em;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.button .loginbtn {
+  color: #333333;
+  font-size: 1.0em;
+  margin-top: 0px;
+}
+
+.green {
+  background: #6C9668;
+}
+
+.red {
+  background: red;
+}
+
+.dark {
+  background: #1C3444;
+}
+
+.top-margin {
+  margin-top: 2em !important;
+}
+
+.notif p {
+  color: #333333;
+  margin-top: 10px;
+  font-size: 1.5em;
+  font-family: 'Poppins', sans-serif;
+  vertical-align: center;
+}
+
+.status {
+  margin-top: -2px !important;
+  margin-right: -4px !important;
+  color: white;
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 6px;
+  background: #6C9668;
+  float: right;
+}
+
+.notif-con {
+  margin: 30px !important;
+}
+
+.form-lbl {
+  color: #333333;
+  font-size: 1.0em;
+  font-family: 'Poppins', sans-serif;
+}
+
+.form-field {
+  height: 50px;
+  border-radius: 6px;
+  width: 100%;
+  border-style: solid;
+  border-color: #6DBFE7;
+  border-width: 2px;
+  padding-left: 10px;
+  color: #6DBFE7;
+  font-size: 1.2em;
+  font-family: 'Poppins', sans-serif;
+}
+
+.form-field:focus {
+  outline: none;
+  border-color: #1C3444;
+  color: #333333;
+}
+
+.form-field::placeholder {
+  color: #e6e6e6;
+}
+
+.log {
+  width: 100%;
+}
+
+#loginForm {
+  margin: 30px;
+}
+
+.clock {
+  height: 100vh;
+  width: auto;
+}
+
 @media (min-width: 48em) {
+
+  .notif {
+    padding-top: 0.1px !important;
+  }
 
   .header,
   .content {
@@ -252,6 +421,63 @@
   #layout.active {
     position: relative;
     left: 250px;
+  }
+
+}
+
+@media (min-width: 500px) {
+  #menuLogin {
+    width: 500px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000; /* so the menu or its navicon stays above all content */
+    background: white;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #login-side {
+    display: block;
+    background: white;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding-left: 200px;
+  }
+
+  .menu-items-con-login {
+    width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 500px) {
+
+  #menuLogin {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000; /* so the menu or its navicon stays above all content */
+    background: white;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #login-side {
+    display: none;
+  }
+
+  .menu-items-con-login {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
 }
