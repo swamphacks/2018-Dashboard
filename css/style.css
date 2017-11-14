@@ -454,15 +454,6 @@
   z-index: 10000;
 }
 
-#mainheader {
-  font-size: 3em;
-	text-align: center;
-  font-family: 'Montserrat', serif;
-  color: #1C3444;
-  transition: 0.3s;
-  padding-top: 2em;
-}
-
 @media (min-width: 48em) {
 
   .notif {
@@ -518,6 +509,15 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  #mainheader {
+    font-size: 3em;
+  	text-align: center;
+    font-family: 'Montserrat', serif;
+    color: #1C3444;
+    transition: 0.3s;
+    padding-top: 2em;
+  }
+
   #login-side {
     background: white;
     width: 100%;
@@ -555,6 +555,15 @@
     background: white;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+  #mainheader {
+    font-size: 2.2em;
+  	text-align: center;
+    font-family: 'Montserrat', serif;
+    color: #1C3444;
+    transition: 0.3s;
+    padding-top: 2em;
   }
 
   #login-side {
