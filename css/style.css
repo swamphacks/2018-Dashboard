@@ -297,6 +297,11 @@
   color: #333333;
   font-size: 1.0em;
   margin-top: 0px;
+
+}
+
+.txtbtnouter {
+  background-color: transparent !important;
 }
 
 .button a:hover,
