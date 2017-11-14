@@ -145,8 +145,8 @@
 
 #menuLogin #logo {
   width: 100%;
-  padding-left: 100px;
-  padding-right: 100px;
+  padding-left: 30%;
+  padding-right: 30%;
   padding-top: 6em;
 }
 
@@ -293,10 +293,16 @@
   text-align: center;
 }
 
-.button .loginbtn {
+.button .textbtn {
   color: #333333;
   font-size: 1.0em;
   margin-top: 0px;
+}
+
+.button a:hover,
+.button a:focus {
+  text-decoration: none;
+
 }
 
 .green {
@@ -376,6 +382,16 @@
 
 #loginForm {
   margin: 30px;
+  margin-top: 60px;
+}
+
+.login-txt {
+  margin-bottom: 2em;
+}
+
+.margin-buffer {
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
 .clock {
