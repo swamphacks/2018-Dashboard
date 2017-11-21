@@ -47,7 +47,11 @@
 					<!-- <img id="logo" class="" src="img/logoblue.svg"></img> -->
 				</div>
 
-				<div class="hide" id="loginStatusTxt">
+				<div class="btngroup hide">
+					<span id="statusWithBtn" class="">Please fill in all fields!</span> <span onclick="resendEmailClicked()" class="resend" id="resendBtn">Resend it?</span>
+				</div>
+
+				<div id="loginStatusTxt" class="hide">
 					Please fill in all fields!
 				</div>
 
@@ -78,8 +82,8 @@
 							</div>
 
 							<div class="col-md-12 descrip-txt login-txt">
-								You should have received an email with a randomly generated password. Login with that
-								and the email you applied with. If you did not get that email, simply make an account!
+								Please login with the email you applied with! If you did not create an account yet,
+								do that first.
 							</div>
 
 						</div>
@@ -180,11 +184,46 @@
 
 							});
 
-							setTimeout(function() {
+							firebase.auth().onAuthStateChanged(function(user) {
 
-								window.location.href = "index.html";
+								console.log("User verified!");
 
-							}, delay);
+								if (user.emailVerified && checkIfUserExists(email)) {
+
+									setTimeout(function() {
+
+										window.location.href = "index.html";
+
+									}, delay);
+
+
+								} else if (!user.emailVerified) {
+
+									// Hide the loader
+									$("#animationWindow").removeClass("showflex");
+									$("#animationWindow").addClass("hide");
+
+									// ERROR
+									$("#statusWithBtn").text("Email not verified! Check your inbox, it could take up to 10 minutes.");
+									$(".btngroup").addClass("show");
+
+									$("#loginStatusTxt").addClass("hide");
+									$("#loginStatusTxt").removeClass("show");
+
+								} else if (!checkIfUserExists(email)) {
+
+									// Hide the loader
+									$("#animationWindow").removeClass("showflex");
+									$("#animationWindow").addClass("hide");
+
+									$("#loginStatusTxt").text("Account verified, but this email is not in our records. Please create an account with the email you applied with.");
+									$("#loginStatusTxt").addClass("show");
+
+									$(".btngroup").addClass("hide");
+									$(".btngroup").removeClass("show");
+								}
+
+							});
 
 						}, delay);
 
@@ -202,11 +241,17 @@
 							$("#loginStatusTxt").text("Wrong password!");
 							$("#loginStatusTxt").addClass("show");
 
+							$(".btngroup").addClass("hide");
+							$(".btngroup").removeClass("show");
+
 						} else if (errorCode.includes("weak-password")) {
 
 							// ERROR
 							$("#loginStatusTxt").text("Password should be at least 6 characters!");
 							$("#loginStatusTxt").addClass("show");
+
+							$(".btngroup").addClass("hide");
+							$(".btngroup").removeClass("show");
 
 						} else if (errorCode.includes("email-already-in-use")) {
 
@@ -214,17 +259,26 @@
 							$("#loginStatusTxt").text("Email already in use!");
 							$("#loginStatusTxt").addClass("show");
 
+							$(".btngroup").addClass("hide");
+							$(".btngroup").removeClass("show");
+
 						} else if (errorCode.includes("invalid-email")) {
 
 							// ERROR
 							$("#loginStatusTxt").text("Invalid email!");
 							$("#loginStatusTxt").addClass("show");
 
+							$(".btngroup").addClass("hide");
+							$(".btngroup").removeClass("show");
+
 						} else {
 
 							// ERROR
 							$("#loginStatusTxt").text("Unknown error logging in. Wrong email?");
 							$("#loginStatusTxt").addClass("show");
+
+							$(".btngroup").addClass("hide");
+							$(".btngroup").removeClass("show");
 						}
 
 				});
@@ -234,9 +288,78 @@
 				$("#loginStatusTxt").text("Please fill in all fields.");
 				$("#loginStatusTxt").addClass("show");
 
+				$(".btngroup").addClass("hide");
+				$(".btngroup").removeClass("show");
+
 				console.log("Fill in all fields.");
 			}
 
+
+		}
+
+		function resendEmailClicked() {
+
+			firebase.auth().onAuthStateChanged(function(user) {
+
+				if (!user.emailVerified) {
+					console.log("Email sent!");
+					user.sendEmailVerification();
+					$("#resendBtn").text("Email Sent!");
+					$("#resendBtn").addClass("disabled");
+
+				} else {
+					$("#resendBtn").text("Already Verified!");
+					$("#resendBtn").addClass("disabled");
+					console.log("Email NOT sent!");
+				}
+
+			});
+
+		}
+
+		function checkIfUserExists(email) {
+
+			var cD;
+			var k;
+
+			usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+
+				console.log("Checking user");
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 var key = childSnapshot.key;
+					 var childData = childSnapshot.val();
+					 cD = childData;
+					 k = key;
+
+				 });
+
+			});
+
+			console.log(cD);
+			console.log(k);
+
+			if (cD !== undefined) {
+
+			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
+			 localStorage.setItem('loggedInUserKey', k);
+			 console.log("User Exists.");
+
+			 return true;
+
+		 } else if (cD === undefined) {
+
+			 console.log("User Does NOT Exist.");
+
+			 return false;
+
+		 } else {
+
+			 console.log("User Does NOT Exist.");
+
+			 return false;
+		 }
 
 		}
 

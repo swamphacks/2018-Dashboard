@@ -245,6 +245,10 @@
   display: block;
 }
 
+.showLine {
+  display: inline;
+}
+
 .showIn {
   display: inherit;
 }
@@ -781,13 +785,38 @@
   }
 }
 
+.btngroup {
+  float: left;
+  padding: 1em;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: -1em;
+}
+
+#statusWithBtn {
+  color: red;
+
+  font-size: 1.1em;
+  line-height: 1.6em;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
 #loginStatusTxt {
+
   padding: 1em;
   margin-left: 30px;
   margin-right: 30px;
   margin-bottom: -1em;
   color: red;
 
+  font-size: 1.1em;
+  line-height: 1.6em;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.resend {
   font-size: 1.1em;
   line-height: 1.6em;
   font-family: 'Poppins', sans-serif;

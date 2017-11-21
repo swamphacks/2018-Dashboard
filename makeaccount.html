@@ -83,8 +83,8 @@
 							</div>
 
 							<div class="col-md-12 descrip-txt login-txt">
-								You should have received an email with a randomly generated password. Login with that
-								and the email you applied with. If you did not get that email, simply make an account!
+								Create your account with the email you applied with. This form will not let
+								you do otherwise!
 							</div>
 
 						</div>
@@ -144,18 +144,19 @@
 
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
+		var userVerified = false;
+		var firstClick = true;
+		var userExists;
 
 		function checkIfUserExists(email) {
 
 			var cD;
 			var k;
 
-			// Delay before checking
 			usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
 				console.log("Checking user");
 
-				 // Getting the info of the found user and storing it in local storage
 				 snapshot.forEach(function(childSnapshot) {
 
 					 var key = childSnapshot.key;
@@ -170,19 +171,19 @@
 			console.log(cD);
 			console.log(k);
 
-			if (cD === undefined) {
-
-			 console.log("User Does NOT Exist.");
-
-			 return false;
-
-		 } else if (cD !== undefined) {
+			if (cD !== undefined) {
 
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
 			 console.log("User Exists.");
 
 			 return true;
+
+		 } else if (cD === undefined) {
+
+			 console.log("User Does NOT Exist.");
+
+			 return false;
 
 		 } else {
 
@@ -199,52 +200,49 @@
 			var password = $("#pass1").val();
 			var confirmPassword = $("#pass2").val();
 
+			firstClick = false;
+
 			if (password !== "" && confirmPassword !== "" && email !== "") {
 
-				if ((confirmPassword === password) && checkIfUserExists(email) === true) {
+				console.log("IN - 1");
+
+				if ((confirmPassword === password)) {
+
+					console.log("IN - 2");
 
 					// Creating user in firebase
 					firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-			        // You can save the user data here.
+							// You can save the user data here.
 
-							// Show the loader
-							$("#animationWindow").removeClass("hide");
-							$("#animationWindow").addClass("showflex");
+							firebase.auth().currentUser.sendEmailVerification().then(function() {
+								// STATUS
+								$("#loginStatusTxt").text("Verification email sent. Click the link and sign in!");
+								$("#loginStatusTxt").addClass("show");
 
-							// Login user
-							firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-							   // User signed in
+								var delay = 3000;
 
-								 var delay = 500;
-								 var smallDelay = 500;
+								setTimeout(function() {
 
-								 setTimeout(function() {
+									window.location.href = "login.html";
 
-									 window.location.href = "index.html";
+								}, delay);
 
-								 }, delay);
+							}, function(error) {
 
-							}).catch(function(error) {
-							    var errorCode = error.code;
-							    var errorMessage = error.message;
+								if (error === null) {
 
-							    if (errorCode.includes("auth/wrong-password")) {
+								} else {
+									console.log(error);
+								}
 
-										$("#loginStatusTxt").text("Wrong password!");
-										$("#loginStatusTxt").addClass("show");
-
-							    } else {
-							        console.log(errorMessage);
-							    }
-							    console.log(error);
 							});
 
-			    }).catch(function(error) {
+					}).catch(function(error) {
 
-			        var errorCode = error.code;
-			        var errorMessage = error.message;
+							var errorCode = error.code;
+							var errorMessage = error.message;
 							console.log("There was an error.");
-			        console.log(errorCode + ' - ' + errorMessage);
+							console.log(errorCode + ' - ' + errorMessage);
 
 							// Handling different types of errors
 
@@ -273,7 +271,60 @@
 								$("#loginStatusTxt").addClass("show");
 							}
 
-			    });
+					});
+
+					firebase.auth().onAuthStateChanged(function(user) {
+
+						if (user.emailVerified) {
+
+							userVerified = true;
+
+							// Show the loader
+							$("#animationWindow").removeClass("hide");
+							$("#animationWindow").addClass("showflex");
+
+							// Login user
+							firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+								 // User signed in
+
+								 var delay = 500;
+								 var smallDelay = 500;
+
+								 setTimeout(function() {
+
+									 window.location.href = "index.html";
+
+								 }, delay);
+
+							}).catch(function(error) {
+
+								// Hide the loader
+								$("#animationWindow").removeClass("showflex");
+								$("#animationWindow").addClass("hide");
+
+									var errorCode = error.code;
+									var errorMessage = error.message;
+
+									if (errorCode.includes("auth/wrong-password")) {
+
+										$("#loginStatusTxt").text("Wrong password!");
+										$("#loginStatusTxt").addClass("show");
+
+									} else {
+											console.log(errorMessage);
+									}
+									console.log(error);
+							});
+
+						} else {
+
+							userVerified = true;
+
+							// ERROR
+							$("#loginStatusTxt").text("Email not verified!");
+							$("#loginStatusTxt").addClass("show");
+						}
+					});
 
 				} else if (password !== confirmPassword) {
 
@@ -281,17 +332,17 @@
 					$("#loginStatusTxt").text("Passwords do not match!");
 					$("#loginStatusTxt").addClass("show");
 
-				} else if (checkIfUserExists(email) === false) {
+				} else if (!checkIfUserExists(email)) {
 
 					// Hide the loader
 					$("#animationWindow").removeClass("showflex");
 					$("#animationWindow").addClass("hide");
 
-					// This comes up if the email is not in the databse (from their website application)
+					// This comes up if the email is not in the database
 					$("#loginStatusTxt").text("Please use the email you applied with.");
 					$("#loginStatusTxt").addClass("show");
 
-				} else if (checkIfUserExists(email) === true) {
+				} else if (checkIfUserExists(email)) {
 
 					// Hide the loader
 					$("#animationWindow").removeClass("showflex");
@@ -304,6 +355,7 @@
 
 			} else {
 
+				console.log("FILL IN");
 				// ERROR
 				$("#loginStatusTxt").text("Please fill in all fields!");
 				$("#loginStatusTxt").addClass("show");
