@@ -420,6 +420,7 @@
   color: #6DBFE7;
   font-size: 1.2em;
   font-family: 'Poppins', sans-serif;
+  background-color: white;
 }
 
 .form-field:focus {

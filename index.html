@@ -150,12 +150,24 @@
 							<form id="profileForm" class="" autocomplete="off">
 								<div class="col-md-6 top-margin">
 									<label class="form-lbl" for="q1" name="">T-Shirt Size *</label>
-									<input class="form-field" id="shirtSize" name="q1" type="text" placeholder="Medium" required/>
+									<!-- <input class="form-field" id="shirtSize" name="q1" type="text" placeholder="Medium" required/> -->
+									<select class="form-field" id="shirtSize" required>
+									  <option value="small">Small</option>
+									  <option value="medium">Medium</option>
+									  <option value="large">Large</option>
+									  <option value="extra-large">Extra Large</option>
+									</select>
 								</div>
 
 								<div class="col-md-6 top-margin">
 									<label class="form-lbl" for="q1" name="">Dietary Restrictions *</label>
-									<input class="form-field" id="diet" name="q1" type="text" placeholder="Halal" required/>
+									<!-- <input class="form-field" id="diet" name="q1" type="text" placeholder="Halal" required/> -->
+									<select class="form-field" id="diet" required>
+									  <option value="none">None</option>
+									  <option value="vegetarian">Vegetarian</option>
+									  <option value="vegan">Vegan</option>
+									  <option value="halal">Halal</option>
+									</select>
 								</div>
 
 								<div class="col-md-12 top-margin">
