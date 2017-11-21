@@ -52,6 +52,10 @@
           <span>SH</span>
       </a>
 
+			<div class="stickyheader">
+				<span id="headertxt">Profile</span>
+			</div>
+
       <div id="menu" class="">
 
           <div class="pure-menu">
@@ -107,13 +111,13 @@
 						</div>
 
 						<div class="row">
-							<div class="col-md-6 top-margin">
+							<div class="col-md-12 top-margin" id="confirmCon">
 								<button class="button green" onclick="confirmSpotBtnClicked()">
 									<p id="confirmSpot">Confirm my spot!</p>
 								</button>
 							</div>
 
-							<div class="col-md-6 top-margin">
+							<div class="col-md-12 top-margin" id="rejectCon">
 								<button class="button dark" id="rejectSpot" onclick="rejectSpotBtnClicked()">
 									<p>I can't go <i class="fa fa-frown-o" aria-hidden="true"></i></p>
 								</button>
@@ -228,6 +232,7 @@
 		var usersRef = ref.child("applicants");
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
+		var selected = 1;
 
 		if (userObj === null) {
 			window.location.href = "login.html";
@@ -271,11 +276,19 @@
 			if (userObj.status === "CONFIRMED") {
 				$("#dashStatus").addClass("green");
 				$("#dashStatus").removeClass("dark");
-				$("#confirmSpot").text("See you there!");
+
+				$("#confirmCon").addClass("hide");
+				$("#confirmCon").removeClass("show");
+				$("#rejectCon").addClass("show");
+				$("#rejectCon").removeClass("hide");
 			} else if (userObj.status === "NOT ATTENDING")  {
 				$("#dashStatus").removeClass("green");
 				$("#dashStatus").addClass("dark");
-				$("#confirmSpot").text("Confirm my spot!");
+
+				$("#confirmCon").addClass("show");
+				$("#confirmCon").removeClass("hide");
+				$("#rejectCon").addClass("hide");
+				$("#rejectCon").removeClass("show");
 			}
 
 		}
@@ -283,9 +296,12 @@
 		function rejectSpotBtnClicked() {
 
 			$("#dashStatus").text("NOT ATTENDING");
-			$("#confirmSpot").text("Confirm my spot!");
 			$("#dashStatus").addClass("dark");
 			$("#dashStatus").removeClass("green");
+			$("#confirmCon").addClass("show");
+			$("#confirmCon").removeClass("hide");
+			$("#rejectCon").addClass("hide");
+			$("#rejectCon").removeClass("show");
 
 			var loggedInUserRef = usersRef.child(loggedInUserKey);
 
@@ -332,9 +348,12 @@
 			}
 
 			$("#dashStatus").text("CONFIRMED");
-			$("#confirmSpot").text("See you there!");
 			$("#dashStatus").addClass("green");
 			$("#dashStatus").removeClass("dark");
+			$("#confirmCon").addClass("hide");
+			$("#confirmCon").removeClass("show");
+			$("#rejectCon").addClass("show");
+			$("#rejectCon").removeClass("hide");
 
 			var loggedInUserRef = usersRef.child(loggedInUserKey);
 
@@ -428,6 +447,8 @@
 
     function menuClick(item) {
 
+			selected = item;
+
 			$("#layout").removeClass("active");
 			$("#menu").removeClass("active");
 			$("#menuLink").removeClass("active");
@@ -456,11 +477,17 @@
 					if (userObj.status === "CONFIRMED") {
 						$("#dashStatus").addClass("green");
 						$("#dashStatus").removeClass("dark");
-						$("#confirmSpot").text("See you there!");
+						$("#confirmCon").addClass("hide");
+						$("#confirmCon").removeClass("show");
+						$("#rejectCon").addClass("show");
+						$("#rejectCon").removeClass("hide");
 					} else if (userObj.status === "NOT ATTENDING")  {
 						$("#dashStatus").removeClass("green");
 						$("#dashStatus").addClass("dark");
-						$("#confirmSpot").text("Confirm my spot!");
+						$("#confirmCon").addClass("show");
+						$("#confirmCon").removeClass("hide");
+						$("#rejectCon").addClass("hide");
+						$("#rejectCon").removeClass("show");
 					}
 
 				}
@@ -528,6 +555,42 @@
 
       }
     }
+
+		function fixTitle() {
+
+			var $this = $(".stickyheader");
+			var headOff = $(".header-main-type").offset().top;
+			var scrollTop = $(window).scrollTop();
+
+			if (selected === 2) {
+
+				$("#headertxt").text("Profile");
+
+			} else if (selected === 1) {
+
+				$("#headertxt").text("Dashboard");
+			}
+
+			console.log("ST: " + scrollTop);
+			console.log("HEAD: " + 84);
+
+			if (scrollTop > (84 - 50)) {
+
+					$(".header-main-type").css("opacity", "0");
+					$(".header-main-type").css("transform", "scale(0.6)");
+					$this.css("opacity", "1");
+
+			} else {
+
+				$(".header-main-type").css("opacity", "1");
+				$(".header-main-type").css("transform", "scale(1)");
+				$this.css("opacity", "0");
+			}
+		}
+
+		$(document).ready(function () {
+			$(window).scroll(fixTitle);
+		});
 
   </script>
 

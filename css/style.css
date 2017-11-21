@@ -24,6 +24,10 @@
   left: 250px;
 }
 
+#layout.active .stickyheader {
+  left: 250px;
+}
+
 #menu {
   margin-left: -250px; /* "#menu" width */
   width: 250px;
@@ -161,6 +165,7 @@
   height: 6em;
   background: #34B1E1;
   text-align: center;
+  border-bottom-right-radius: 6px;
 }
 
 .menu-link:hover,
@@ -208,6 +213,30 @@
   border-left-color: white;*/
 }
 
+.stickyheader span {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
+
+.stickyheader {
+  position: fixed;
+  top: 0;
+  left: 0; /* "#menu width" */
+  width: 100%;
+  font-size: 10px; /* change this value to increase/decrease button size */
+  background: #34B1E1;
+  text-align: center;
+  transition: 0.3s;
+  height: 6em;
+  z-index: 2;
+  opacity: 0;
+}
+
 .hide {
   display: hidden;
 }
@@ -243,6 +272,7 @@
   font-family: 'Poppins', sans-serif;
   text-align: center;
   margin-top: 2em;
+  transition: 0.3s;
 }
 
 .header-sub-type {
@@ -366,6 +396,7 @@
   padding-bottom: 2px;
   border-radius: 6px;
   float: right;
+  transition: 0.3s;
 }
 
 .notif-con {
@@ -430,9 +461,17 @@
    justify-content: center;
 }
 
+#rejectCon {
+  transition: 0.3s;
+}
+
+#confirmCon {
+  transition: 0.3s;
+}
+
 #successAnimation {
   padding-top: 0px;
-  margin-bottom: -20px !important;
+  margin-bottom: -24px !important;
 }
 
 .pair {
@@ -826,6 +865,11 @@
   .content {
     padding-left: 2em;
     padding-right: 2em;
+  }
+
+  .stickyheader {
+    left: 250px;
+    width: calc(100% - 250px);
   }
 
   #layout {
