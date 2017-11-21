@@ -385,6 +385,15 @@
   vertical-align: center;
 }
 
+.resetPass {
+  margin-top: 4em;
+}
+
+#userEmail:hover,
+#userEmail:focus {
+  cursor: not-allowed;
+}
+
 .status {
   margin-top: -2px !important;
   margin-right: -4px !important;
