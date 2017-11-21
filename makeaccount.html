@@ -34,14 +34,22 @@
 
   <body>
 
+	<div id="animationWindow" class="hide">
+		<div class="loader"></div>
+	</div>
+
   <div id="layout" class="">
 
       <div id="menuLogin" class="">
 
-				<a class="pure-menu-heading" href="#">
+				<div class="pure-menu-heading" href="#">
 					<h1 id="mainheader">swamp<b>hacks IV</b></h1>
 					<!-- <img id="logo" class="" src="img/logoblue.svg"></img> -->
-				</a>
+				</div>
+
+				<div class="hide" id="loginStatusTxt">
+					Please fill in all fields!
+				</div>
 
 				<div class="menu-items-con-login">
 
@@ -49,21 +57,21 @@
 						<form id="loginForm" class="" autocomplete="off">
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Email</label>
-								<input class="form-field" id="q1" name="q1" type="text" placeholder="" required/>
+								<input class="form-field" id="email" name="q1" type="text" placeholder="" required/>
 							</div>
 
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Password</label>
-								<input class="form-field" id="q1" name="q1" type="password" placeholder="" required/>
+								<input class="form-field" id="pass1" name="q1" type="password" placeholder="" required/>
 							</div>
 
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Confirm Password</label>
-								<input class="form-field" id="q1" name="q1" type="password" placeholder="" required/>
+								<input class="form-field" id="pass2" name="q1" type="password" placeholder="" required/>
 							</div>
 
 							<div class="col-md-12 top-margin">
-								<button class="button green"><a href=""><p class="makeactbtn">Create Account</p></a></button>
+								<button class="button green" id="createAccountBtn" onclick="createActBtnClicked()"><a href=""><p class="makeactbtn">Create Account</p></a></button>
 							</div>
 
 						</form>
@@ -110,69 +118,203 @@
   <script src="js/menu.js"></script>
   <script src="js/jquery.js"></script>
   <script src="js/classie.js"></script>
+	<script src='js/bodymovin.min.js'></script>
 
   </body>
 
-  <script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.6/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.6/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.6/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.6/firebase.js"></script>
+	<script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyCkPM5Ta8WgzxpOP6O9WuLWD6Irkd6GAPc",
+			authDomain: "swamphacks-applicants.firebaseapp.com",
+			databaseURL: "https://swamphacks-applicants.firebaseio.com",
+			projectId: "swamphacks-applicants",
+			storageBucket: "swamphacks-applicants.appspot.com",
+			messagingSenderId: "622854578748"
+		};
+		firebase.initializeApp(config);
+	</script>
 
-    function menuClick(item) {
+	<script>
 
-			$("#layout").removeClass("active");
-			$("#menu").removeClass("active");
-			$("#menuLink").removeClass("active");
+		var ref = firebase.database().ref();
+		var usersRef = ref.child("applicants");
+
+		function checkIfUserExists(email) {
+
+			var cD;
+			var k;
+
+			// Delay before checking
+			usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+
+				console.log("Checking user");
+
+				 // Getting the info of the found user and storing it in local storage
+				 snapshot.forEach(function(childSnapshot) {
+
+					 var key = childSnapshot.key;
+					 var childData = childSnapshot.val();
+					 cD = childData;
+					 k = key;
+
+				 });
+
+			});
+
+			console.log(cD);
+			console.log(k);
+
+			if (cD === undefined) {
+
+			 console.log("User Does NOT Exist.");
+
+			 return false;
+
+		 } else if (cD !== undefined) {
+
+			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
+			 localStorage.setItem('loggedInUserKey', k);
+			 console.log("User Exists.");
+
+			 return true;
+
+		 } else {
+
+			 console.log("User Does NOT Exist.");
+
+			 return false;
+		 }
+
+		}
+
+		function createActBtnClicked() {
+
+			var email = $("#email").val();
+			var password = $("#pass1").val();
+			var confirmPassword = $("#pass2").val();
+
+			if (password !== "" && confirmPassword !== "" && email !== "") {
+
+				if ((confirmPassword === password) && checkIfUserExists(email) === true) {
+
+					// Creating user in firebase
+					firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+			        // You can save the user data here.
+
+							// Show the loader
+							$("#animationWindow").removeClass("hide");
+							$("#animationWindow").addClass("showflex");
+
+							// Login user
+							firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+							   // User signed in
+
+								 var delay = 500;
+								 var smallDelay = 500;
+
+								 setTimeout(function() {
+
+									 window.location.href = "index.html";
+
+								 }, delay);
+
+							}).catch(function(error) {
+							    var errorCode = error.code;
+							    var errorMessage = error.message;
+
+							    if (errorCode.includes("auth/wrong-password")) {
+
+										$("#loginStatusTxt").text("Wrong password!");
+										$("#loginStatusTxt").addClass("show");
+
+							    } else {
+							        console.log(errorMessage);
+							    }
+							    console.log(error);
+							});
+
+			    }).catch(function(error) {
+
+			        var errorCode = error.code;
+			        var errorMessage = error.message;
+							console.log("There was an error.");
+			        console.log(errorCode + ' - ' + errorMessage);
+
+							// Handling different types of errors
+
+							if (errorCode.includes("weak-password")) {
+
+								// ERROR
+								$("#loginStatusTxt").text("Password should be at least 6 characters!");
+								$("#loginStatusTxt").addClass("show");
+
+							} else if (errorCode.includes("email-already-in-use")) {
+
+								// ERROR
+								$("#loginStatusTxt").text("Email already in use! Please Login.");
+								$("#loginStatusTxt").addClass("show");
+
+							} else if (errorCode.includes("invalid-email")) {
+
+								// ERROR
+								$("#loginStatusTxt").text("Invalid email!");
+								$("#loginStatusTxt").addClass("show");
+
+							} else {
+
+								// ERROR
+								$("#loginStatusTxt").text("Unknown error making your account. Try again");
+								$("#loginStatusTxt").addClass("show");
+							}
+
+			    });
+
+				} else if (password !== confirmPassword) {
+
+					// ERROR
+					$("#loginStatusTxt").text("Passwords do not match!");
+					$("#loginStatusTxt").addClass("show");
+
+				} else if (checkIfUserExists(email) === false) {
+
+					// Hide the loader
+					$("#animationWindow").removeClass("showflex");
+					$("#animationWindow").addClass("hide");
+
+					// This comes up if the email is not in the databse (from their website application)
+					$("#loginStatusTxt").text("Please use the email you applied with.");
+					$("#loginStatusTxt").addClass("show");
+
+				} else if (checkIfUserExists(email) === true) {
+
+					// Hide the loader
+					$("#animationWindow").removeClass("showflex");
+					$("#animationWindow").addClass("hide");
+
+					$("#loginStatusTxt").text("Email already in use! Please Login.");
+					$("#loginStatusTxt").addClass("show");
+
+				}
+
+			} else {
+
+				// ERROR
+				$("#loginStatusTxt").text("Please fill in all fields!");
+				$("#loginStatusTxt").addClass("show");
+
+			}
+
+		}
+
+		$("form").submit(function() { return false; });
 
 
-      // Hiding and showing the appropriate info
-      if (item === 1) {
-
-        $("#op1").addClass("pure-menu-selected");
-        $("#op2").removeClass("pure-menu-selected");
-        $("#op3").removeClass("pure-menu-selected");
-
-        $("#dashboard").addClass("show");
-        $("#dashboard").removeClass("hide");
-
-        $("#info").addClass("hide");
-        $("#info").removeClass("show");
-
-        $("#login").addClass("hide");
-        $("#login").removeClass("show");
-
-      } else if (item === 2) {
-
-        $("#op2").addClass("pure-menu-selected");
-        $("#op3").removeClass("pure-menu-selected");
-        $("#op1").removeClass("pure-menu-selected");
-
-        $("#dashboard").addClass("hide");
-        $("#dashboard").removeClass("show");
-
-        $("#info").addClass("show");
-        $("#info").removeClass("hide");
-
-				$(".fa-exclamation-triangle").addClass("hide");
-
-        $("#login").addClass("hide");
-        $("#login").removeClass("show");
-
-      } else if (item === 3) {
-
-        $("#op3").addClass("pure-menu-selected");
-        $("#op2").removeClass("pure-menu-selected");
-        $("#op1").removeClass("pure-menu-selected");
-
-        $("#dashboard").addClass("hide");
-        $("#dashboard").removeClass("show");
-
-        $("#info").addClass("hide");
-        $("#info").removeClass("show");
-
-        $("#login").addClass("show");
-        $("#login").removeClass("hide");
-
-      }
-    }
-
-  </script>
+	</script>
 
 </html>
