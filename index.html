@@ -229,6 +229,10 @@
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 
+		if (userObj === null) {
+			window.location.href = "login.html";
+		}
+
 		console.log(userObj);
 		console.log(loggedInUserKey);
 
