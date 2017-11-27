@@ -143,6 +143,7 @@
 
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
+		var acceptedRef = ref.child("accepted");
 		$("form").submit(function() { return false; });
 
     function loginBtnClicked() {
@@ -165,7 +166,7 @@
 
 						setTimeout(function() {
 							// Delay before checking
-							usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+							acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
 								console.log("Checking user");
 
@@ -188,7 +189,7 @@
 
 								console.log("User verified!");
 
-								if (user.emailVerified && checkIfUserExists(email)) {
+								if (user.emailVerified) {
 
 									setTimeout(function() {
 
@@ -210,17 +211,6 @@
 									$("#loginStatusTxt").addClass("hide");
 									$("#loginStatusTxt").removeClass("show");
 
-								} else if (!checkIfUserExists(email)) {
-
-									// Hide the loader
-									$("#animationWindow").removeClass("showflex");
-									$("#animationWindow").addClass("hide");
-
-									$("#loginStatusTxt").text("Account verified, but this email is not in our records. Please create an account with the email you applied with.");
-									$("#loginStatusTxt").addClass("show");
-
-									$(".btngroup").addClass("hide");
-									$(".btngroup").removeClass("show");
 								}
 
 							});
@@ -322,7 +312,7 @@
 			var cD;
 			var k;
 
-			usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
 				console.log("Checking user");
 

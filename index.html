@@ -44,6 +44,29 @@
 	</div>
 	</div>
 
+	<div id="confirmLogoutPopup" class="hide">
+		<div class="centerConfirm">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="popuptxt centertxt">Logout?</div>
+				</div>
+			</div>
+
+			<div class="row btn-row">
+				<div class="col-xs-6">
+					<button class="button green" id="confirmLogout" onclick="confirmLogoutClicked()">
+						<p>Yep</p>
+					</button>
+				</div>
+				<div class="col-xs-6">
+					<button class="button green" id="denyLogout" onclick="denyLogoutClicked()">
+						<p>Go Back</p>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
   <div id="layout" class="">
       <!-- Menu toggle -->
       <a href="#menu" id="menuLink" class="menu-link">
@@ -255,12 +278,13 @@
 
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
+		var acceptedRef = ref.child("accepted");
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var selected = 1;
 
 		if (userObj === null) {
-			window.location.href = "login.html";
+			window.location.href = "makeaccount.html";
 		}
 
 		console.log(userObj);
@@ -330,13 +354,13 @@
 			$("#rejectCon").addClass("hide");
 			$("#rejectCon").removeClass("show");
 
-			var loggedInUserRef = usersRef.child(loggedInUserKey);
+			var loggedInUserRef = acceptedRef.child(loggedInUserKey);
 
 			loggedInUserRef.update({
 				status: "NOT ATTENDING"
 			});
 
-			usersRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
+			acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
 
 				 // Getting the info of the found user and storing it in local storage
 				 snapshot.forEach(function(childSnapshot) {
@@ -382,13 +406,13 @@
 			$("#rejectCon").addClass("show");
 			$("#rejectCon").removeClass("hide");
 
-			var loggedInUserRef = usersRef.child(loggedInUserKey);
+			var loggedInUserRef = acceptedRef.child(loggedInUserKey);
 
 			loggedInUserRef.update({
 				status: "CONFIRMED"
 			});
 
-			usersRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
+			acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
 
 				 // Getting the info of the found user and storing it in local storage
 				 snapshot.forEach(function(childSnapshot) {
@@ -415,7 +439,7 @@
 
 			if (dietaryRestriction !== "" && tshirtSize !== "") {
 
-				var loggedInUserRef = usersRef.child(loggedInUserKey);
+				var loggedInUserRef = acceptedRef.child(loggedInUserKey);
 
 				if (extraInfo !== "") {
 
@@ -434,7 +458,7 @@
 
 				}
 
-				usersRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
+				acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
 
 					console.log("Checking user");
 
@@ -559,31 +583,47 @@
 
       } else if (item === 3) {
 
-        $("#op3").addClass("pure-menu-selected");
-        $("#op2").removeClass("pure-menu-selected");
-        $("#op1").removeClass("pure-menu-selected");
+        // $("#op3").addClass("pure-menu-selected");
+        // $("#op2").removeClass("pure-menu-selected");
+        // $("#op1").removeClass("pure-menu-selected");
+        //
+        // $("#dashboard").addClass("hide");
+        // $("#dashboard").removeClass("show");
+        //
+        // $("#info").addClass("hide");
+        // $("#info").removeClass("show");
 
-        $("#dashboard").addClass("hide");
-        $("#dashboard").removeClass("show");
-
-        $("#info").addClass("hide");
-        $("#info").removeClass("show");
-
-				firebase.auth().signOut().then(function() {
-				  // Sign-out successful.
-					console.log("Logout Succesful.");
-					localStorage.setItem('loggedInUser', null);
-					localStorage.setItem('loggedInUserKey', null);
-
-					window.location.href = "login.html";
-
-				}, function(error) {
-				  // An error happened.
-					console.log("Error Logging out.");
-				});
+				// Show the confirm logout popup
+				$("#confirmLogoutPopup").removeClass("hide");
+				$("#confirmLogoutPopup").addClass("showflex");
 
       }
     }
+
+		function denyLogoutClicked() {
+
+			// Hide the confirm logout popup
+			$("#confirmLogoutPopup").removeClass("showflex");
+			$("#confirmLogoutPopup").addClass("hide");
+
+		}
+
+		function confirmLogoutClicked() {
+
+			firebase.auth().signOut().then(function() {
+				// Sign-out successful.
+				console.log("Logout Succesful.");
+				localStorage.setItem('loggedInUser', null);
+				localStorage.setItem('loggedInUserKey', null);
+
+				window.location.href = "login.html";
+
+			}, function(error) {
+				// An error happened.
+				console.log("Error Logging out.");
+			});
+
+		}
 
 		function fixTitle() {
 

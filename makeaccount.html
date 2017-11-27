@@ -71,7 +71,7 @@
 							</div>
 
 							<div class="col-md-12 top-margin">
-								<button class="button green" id="createAccountBtn" onclick="createActBtnClicked()"><a href=""><p class="makeactbtn">Create Account</p></a></button>
+								<button class="button green" id="createAccountBtn" onclick=""><a href=""><p class="makeactbtn">Create Account</p></a></button>
 							</div>
 
 						</form>
@@ -144,16 +144,19 @@
 
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
+		var acceptedRef = ref.child("accepted");
 		var userVerified = false;
 		var firstClick = true;
 		var userExists;
+		var loopCount = 0;
+		var repeatCheck = true;
 
 		function checkIfUserExists(email) {
 
 			var cD;
 			var k;
 
-			usersRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
 				console.log("Checking user");
 
@@ -176,31 +179,38 @@
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
 			 console.log("User Exists.");
-
+			 userExists = true;
 			 return true;
 
 		 } else if (cD === undefined) {
 
-			 console.log("User Does NOT Exist.");
-
+			 console.log("User Does NOT Exist. 1");
+			 userExists = false;
 			 return false;
 
 		 } else {
 
-			 console.log("User Does NOT Exist.");
-
+			 console.log("User Does NOT Exist. 2");
+			 userExists = false;
 			 return false;
 		 }
 
 		}
 
+		$("form").submit(function() {
+
+			repeatCheck = true;
+			createActBtnClicked();
+			return false;
+		});
+
 		function createActBtnClicked() {
+
+			//checkIfUserExists(email);
 
 			var email = $("#email").val();
 			var password = $("#pass1").val();
 			var confirmPassword = $("#pass2").val();
-
-			firstClick = false;
 
 			if (password !== "" && confirmPassword !== "" && email !== "") {
 
@@ -208,131 +218,229 @@
 
 				if ((confirmPassword === password)) {
 
-					console.log("IN - 2");
+					checkIfUserExists(email);
 
-					// Creating user in firebase
-					firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-							// You can save the user data here.
+					var checkDelay;
 
-							firebase.auth().currentUser.sendEmailVerification().then(function() {
-								// STATUS
-								$("#loginStatusTxt").text("Verification email sent. Click the link and sign in!");
-								$("#loginStatusTxt").addClass("show");
+					if (repeatCheck) {
 
-								var delay = 3000;
+						repeatCheck = false;
 
-								setTimeout(function() {
+						// Show the loader
+						$("#animationWindow").removeClass("hide");
+						$("#animationWindow").addClass("showflex");
 
-									window.location.href = "login.html";
+						var delay = 600;
 
-								}, delay);
+						setTimeout(function() {
 
-							}, function(error) {
+							// Hide the loader
+							$("#animationWindow").removeClass("showflex");
+							$("#animationWindow").addClass("hide");
 
-								if (error === null) {
+							createActBtnClicked(loopCount);
 
-								} else {
-									console.log(error);
-								}
+						}, delay);
 
-							});
+						checkDelay = 0;
+					} else {
+						checkDelay = 0;
+					}
 
-					}).catch(function(error) {
+					setTimeout(function() {
 
-							var errorCode = error.code;
-							var errorMessage = error.message;
-							console.log("There was an error.");
-							console.log(errorCode + ' - ' + errorMessage);
+					if (userExists === true) {
 
-							// Handling different types of errors
+							console.log("IN - 2");
 
-							if (errorCode.includes("weak-password")) {
+							// Creating user in firebase
+							firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+									// You can save the user data here.
 
-								// ERROR
-								$("#loginStatusTxt").text("Password should be at least 6 characters!");
-								$("#loginStatusTxt").addClass("show");
+									// Creating a node under 'accepted' in the database
+									// var newUser = JSON.parse(localStorage.getItem('loggedInUser'));
+									//
+									// if (newUser.subscribedToMail !== undefined) {
+									//
+									// 	acceptedRef.push({
+									// 		fname: newUser.fname,
+									// 		lname: newUser.lname,
+									// 		email: newUser.email,
+									// 		gender: newUser.gender,
+									// 		race: newUser.race,
+									// 		ethnicity: newUser.ethnicity,
+									// 		school: newUser.school,
+									// 		year: newUser.year,
+									// 		git: newUser.git,
+									// 		linkedin: newUser.linkedin,
+									// 		firstT: newUser.firstT,
+									// 		marketing: newUser.marketing,
+									// 		subscribedToMail: newUser.subscribedToMail,
+									//
+									// 		dietaryRestriction: undefined,
+									// 		extraInfo: undefined,
+									// 		tShirtSize: undefined,
+									// 		status: "ACCEPTED"
+									// 	});
+									//
+									// } else {
+									//
+									// 	acceptedRef.push({
+									// 		fname: newUser.fname,
+									// 		lname: newUser.lname,
+									// 		email: newUser.email,
+									// 		gender: newUser.gender,
+									// 		race: newUser.race,
+									// 		ethnicity: newUser.ethnicity,
+									// 		school: newUser.school,
+									// 		year: newUser.year,
+									// 		git: newUser.git,
+									// 		linkedin: newUser.linkedin,
+									// 		firstT: newUser.firstT,
+									// 		marketing: newUser.marketing,
+									//
+									// 		subscribedToMail: undefined,
+									// 		dietaryRestriction: undefined,
+									// 		extraInfo: undefined,
+									// 		tShirtSize: undefined,
+									// 		status: "ACCEPTED"
+									// 	});
+									//
+									//
+									// }
 
-							} else if (errorCode.includes("email-already-in-use")) {
+									firebase.auth().currentUser.sendEmailVerification().then(function() {
+										// STATUS
+										$("#loginStatusTxt").text("Verification email sent. Click the link and sign in!");
+										$("#loginStatusTxt").addClass("show");
 
-								// ERROR
-								$("#loginStatusTxt").text("Email already in use! Please Login.");
-								$("#loginStatusTxt").addClass("show");
+										loopCount = 3;
 
-							} else if (errorCode.includes("invalid-email")) {
+										var delay = 3000;
 
-								// ERROR
-								$("#loginStatusTxt").text("Invalid email!");
-								$("#loginStatusTxt").addClass("show");
+										setTimeout(function() {
 
-							} else {
+											window.location.href = "login.html";
 
-								// ERROR
-								$("#loginStatusTxt").text("Unknown error making your account. Try again");
-								$("#loginStatusTxt").addClass("show");
-							}
+										}, delay);
 
-					});
+									}, function(error) {
 
-					firebase.auth().onAuthStateChanged(function(user) {
+										if (error === null) {
 
-						if (user.emailVerified) {
+										} else {
+											console.log(error);
+										}
 
-							userVerified = true;
-
-							// Show the loader
-							$("#animationWindow").removeClass("hide");
-							$("#animationWindow").addClass("showflex");
-
-							// Login user
-							firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-								 // User signed in
-
-								 var delay = 500;
-								 var smallDelay = 500;
-
-								 setTimeout(function() {
-
-									 window.location.href = "index.html";
-
-								 }, delay);
+									});
 
 							}).catch(function(error) {
 
-								// Hide the loader
-								$("#animationWindow").removeClass("showflex");
-								$("#animationWindow").addClass("hide");
-
 									var errorCode = error.code;
 									var errorMessage = error.message;
+									console.log("There was an error.");
+									console.log(errorCode + ' - ' + errorMessage);
 
-									if (errorCode.includes("auth/wrong-password")) {
+									// Handling different types of errors
 
-										$("#loginStatusTxt").text("Wrong password!");
+									if (errorCode.includes("weak-password")) {
+
+										// ERROR
+										$("#loginStatusTxt").text("Password should be at least 6 characters!");
+										$("#loginStatusTxt").addClass("show");
+
+									} else if (errorCode.includes("email-already-in-use")) {
+
+										// ERROR
+										$("#loginStatusTxt").text("Email already in use! Please Login.");
+										$("#loginStatusTxt").addClass("show");
+
+									} else if (errorCode.includes("invalid-email")) {
+
+										// ERROR
+										$("#loginStatusTxt").text("Invalid email!");
 										$("#loginStatusTxt").addClass("show");
 
 									} else {
-											console.log(errorMessage);
+
+										// ERROR
+										$("#loginStatusTxt").text("Unknown error making your account. Try again");
+										$("#loginStatusTxt").addClass("show");
 									}
-									console.log(error);
+
 							});
 
-						} else {
+							firebase.auth().onAuthStateChanged(function(user) {
 
-							userVerified = true;
+								if (user.emailVerified) {
 
-							// ERROR
-							$("#loginStatusTxt").text("Email not verified!");
-							$("#loginStatusTxt").addClass("show");
-						}
-					});
+									userVerified = true;
+
+									// Show the loader
+									$("#animationWindow").removeClass("hide");
+									$("#animationWindow").addClass("showflex");
+
+									// Login user
+									firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
+										 // User signed in
+
+										 var delay = 500;
+										 var smallDelay = 500;
+
+										 setTimeout(function() {
+
+											 window.location.href = "index.html";
+
+										 }, delay);
+
+									}).catch(function(error) {
+
+										// Hide the loader
+										$("#animationWindow").removeClass("showflex");
+										$("#animationWindow").addClass("hide");
+
+											var errorCode = error.code;
+											var errorMessage = error.message;
+
+											if (errorCode.includes("auth/wrong-password")) {
+
+												$("#loginStatusTxt").text("Wrong password!");
+												$("#loginStatusTxt").addClass("show");
+
+											} else {
+													console.log(errorMessage);
+											}
+											console.log(error);
+									});
+
+								} else {
+
+									userVerified = true;
+
+									// ERROR
+									$("#loginStatusTxt").text("Email not verified!");
+									$("#loginStatusTxt").addClass("show");
+								}
+							});
+
+				} else {
+
+					console.log("CANNOT MAKE ACCOUNT, USER NOT IN DB");
+
+				}
+
+				}, checkDelay);
 
 				} else if (password !== confirmPassword) {
+
+
 
 					// ERROR
 					$("#loginStatusTxt").text("Passwords do not match!");
 					$("#loginStatusTxt").addClass("show");
 
-				} else if (!checkIfUserExists(email)) {
+				} else if (!userExists) {
+
 
 					// Hide the loader
 					$("#animationWindow").removeClass("showflex");
@@ -342,7 +450,7 @@
 					$("#loginStatusTxt").text("Please use the email you applied with.");
 					$("#loginStatusTxt").addClass("show");
 
-				} else if (checkIfUserExists(email)) {
+				} else if (userExists) {
 
 					// Hide the loader
 					$("#animationWindow").removeClass("showflex");
@@ -362,9 +470,9 @@
 
 			}
 
-		}
+			console.log(loopCount);
 
-		$("form").submit(function() { return false; });
+		}
 
 
 	</script>

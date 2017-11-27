@@ -365,6 +365,10 @@
   background: red;
 }
 
+.lightRed {
+  background: #EE2229;
+}
+
 .greenTxt {
   color: #6C9668;
 }
@@ -492,10 +496,21 @@
   display: inline-block;
 }
 
-.pair .popuptxt {
+.popuptxt {
   color: white;
   font-size: 3em;
   font-family: 'Poppins', sans-serif;
+}
+
+.popuptxt-small {
+  color: white;
+  font-size: 1.5em;
+  font-family: 'Poppins', sans-serif;
+}
+
+.centertxt {
+  width: 100%;
+  text-align: center;
 }
 
 /* Sucess Check mark */
@@ -621,6 +636,23 @@
 }
 
 #confirmedPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(108,150,104,0.8);
+  text-align: center;
+  overflow: hidden;
+  z-index: 100000;
+
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#confirmLogoutPopup {
   position: fixed;
   top: 0;
   left: 0;
@@ -842,6 +874,17 @@
 .clock {
   height: 100vh;
   width: auto;
+}
+
+.btn-row {
+  margin-top: 3em;
+}
+
+.centerConfirm {
+
+  width: 90%;
+  max-width: 400px;
+
 }
 
 .top-blk {
