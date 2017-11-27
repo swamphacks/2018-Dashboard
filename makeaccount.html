@@ -62,11 +62,13 @@
 
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Password</label>
+								<i class="fa fa-lock pass-visibility" aria-hidden="true" id="pv1" onclick="showPassPressed(pass1, pv1)"></i>
 								<input class="form-field" id="pass1" name="q1" type="password" placeholder="" required/>
 							</div>
 
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Confirm Password</label>
+								<i class="fa fa-lock pass-visibility" aria-hidden="true" id="pv2" onclick="showPassPressed(pass2, pv2)"></i>
 								<input class="form-field" id="pass2" name="q1" type="password" placeholder="" required/>
 							</div>
 
@@ -369,11 +371,25 @@
 				}
 
 			} else {
-				
+
 				// ERROR
 				$("#loginStatusTxt").text("Please fill in all fields!");
 				$("#loginStatusTxt").addClass("show");
 
+			}
+
+		}
+
+		function showPassPressed(field, icon) {
+
+			if (field.type === "password") {
+				field.type = "text";
+				$(icon).removeClass("fa-lock");
+				$(icon).addClass("fa-unlock-alt");
+			} else {
+				field.type = "password";
+				$(icon).addClass("fa-lock");
+				$(icon).removeClass("fa-unlock-alt");
 			}
 
 		}

@@ -66,6 +66,7 @@
 
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Password</label>
+								<i class="fa fa-lock pass-visibility" aria-hidden="true" id="pv3" onclick="showPassPressed(password, pv3)"></i>
 								<input class="form-field" id="password" name="q1" type="password" placeholder="" required/>
 							</div>
 
@@ -350,6 +351,20 @@
 
 			 return false;
 		 }
+
+		}
+
+		function showPassPressed(field, icon) {
+
+			if (field.type === "password") {
+				field.type = "text";
+				$(icon).removeClass("fa-lock");
+				$(icon).addClass("fa-unlock-alt");
+			} else {
+				field.type = "password";
+				$(icon).addClass("fa-lock");
+				$(icon).removeClass("fa-unlock-alt");
+			}
 
 		}
 
