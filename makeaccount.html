@@ -148,7 +148,6 @@
 		var userVerified = false;
 		var firstClick = true;
 		var userExists;
-		var loopCount = 0;
 		var repeatCheck = true;
 
 		function checkIfUserExists(email) {
@@ -157,8 +156,6 @@
 			var k;
 
 			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
-
-				console.log("Checking user");
 
 				 snapshot.forEach(function(childSnapshot) {
 
@@ -171,26 +168,21 @@
 
 			});
 
-			console.log(cD);
-			console.log(k);
-
 			if (cD !== undefined) {
 
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
-			 console.log("User Exists.");
+
 			 userExists = true;
 			 return true;
 
 		 } else if (cD === undefined) {
 
-			 console.log("User Does NOT Exist. 1");
 			 userExists = false;
 			 return false;
 
 		 } else {
 
-			 console.log("User Does NOT Exist. 2");
 			 userExists = false;
 			 return false;
 		 }
@@ -206,21 +198,15 @@
 
 		function createActBtnClicked() {
 
-			//checkIfUserExists(email);
-
 			var email = $("#email").val();
 			var password = $("#pass1").val();
 			var confirmPassword = $("#pass2").val();
 
 			if (password !== "" && confirmPassword !== "" && email !== "") {
 
-				console.log("IN - 1");
-
 				if ((confirmPassword === password)) {
 
 					checkIfUserExists(email);
-
-					var checkDelay;
 
 					if (repeatCheck) {
 
@@ -230,17 +216,15 @@
 						$("#animationWindow").removeClass("hide");
 						$("#animationWindow").addClass("showflex");
 
-						var delay = 600;
-
 						setTimeout(function() {
 
 							// Hide the loader
 							$("#animationWindow").removeClass("showflex");
 							$("#animationWindow").addClass("hide");
 
-							createActBtnClicked(loopCount);
+							createActBtnClicked();
 
-						}, delay);
+						}, 600);
 
 						checkDelay = 0;
 					} else {
@@ -251,70 +235,16 @@
 
 					if (userExists === true) {
 
-							console.log("IN - 2");
-
 							// Creating user in firebase
 							firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+
 									// You can save the user data here.
 
-									// Creating a node under 'accepted' in the database
-									// var newUser = JSON.parse(localStorage.getItem('loggedInUser'));
-									//
-									// if (newUser.subscribedToMail !== undefined) {
-									//
-									// 	acceptedRef.push({
-									// 		fname: newUser.fname,
-									// 		lname: newUser.lname,
-									// 		email: newUser.email,
-									// 		gender: newUser.gender,
-									// 		race: newUser.race,
-									// 		ethnicity: newUser.ethnicity,
-									// 		school: newUser.school,
-									// 		year: newUser.year,
-									// 		git: newUser.git,
-									// 		linkedin: newUser.linkedin,
-									// 		firstT: newUser.firstT,
-									// 		marketing: newUser.marketing,
-									// 		subscribedToMail: newUser.subscribedToMail,
-									//
-									// 		dietaryRestriction: undefined,
-									// 		extraInfo: undefined,
-									// 		tShirtSize: undefined,
-									// 		status: "ACCEPTED"
-									// 	});
-									//
-									// } else {
-									//
-									// 	acceptedRef.push({
-									// 		fname: newUser.fname,
-									// 		lname: newUser.lname,
-									// 		email: newUser.email,
-									// 		gender: newUser.gender,
-									// 		race: newUser.race,
-									// 		ethnicity: newUser.ethnicity,
-									// 		school: newUser.school,
-									// 		year: newUser.year,
-									// 		git: newUser.git,
-									// 		linkedin: newUser.linkedin,
-									// 		firstT: newUser.firstT,
-									// 		marketing: newUser.marketing,
-									//
-									// 		subscribedToMail: undefined,
-									// 		dietaryRestriction: undefined,
-									// 		extraInfo: undefined,
-									// 		tShirtSize: undefined,
-									// 		status: "ACCEPTED"
-									// 	});
-									//
-									//
-									// }
-
 									firebase.auth().currentUser.sendEmailVerification().then(function() {
+
 										// STATUS
 										$("#loginStatusTxt").text("Verification email sent. Click the link and sign in!");
 										$("#loginStatusTxt").addClass("show");
-
-										loopCount = 3;
 
 										var delay = 3000;
 
@@ -326,11 +256,7 @@
 
 									}, function(error) {
 
-										if (error === null) {
-
-										} else {
-											console.log(error);
-										}
+										if (error !== null) { console.log(error); }
 
 									});
 
@@ -338,6 +264,7 @@
 
 									var errorCode = error.code;
 									var errorMessage = error.message;
+
 									console.log("There was an error.");
 									console.log(errorCode + ' - ' + errorMessage);
 
@@ -410,7 +337,7 @@
 											} else {
 													console.log(errorMessage);
 											}
-											console.log(error);
+
 									});
 
 								} else {
@@ -425,52 +352,29 @@
 
 				} else {
 
-					console.log("CANNOT MAKE ACCOUNT, USER NOT IN DB");
+					// ERROR
+					$("#loginStatusTxt").text("Please use the email you applied with.");
+					$("#loginStatusTxt").addClass("show");
 
 				}
 
 				}, checkDelay);
 
-				} else if (password !== confirmPassword) {
-
-
+				} else {
 
 					// ERROR
 					$("#loginStatusTxt").text("Passwords do not match!");
 					$("#loginStatusTxt").addClass("show");
 
-				} else if (!userExists) {
-
-
-					// Hide the loader
-					$("#animationWindow").removeClass("showflex");
-					$("#animationWindow").addClass("hide");
-
-					// This comes up if the email is not in the database
-					$("#loginStatusTxt").text("Please use the email you applied with.");
-					$("#loginStatusTxt").addClass("show");
-
-				} else if (userExists) {
-
-					// Hide the loader
-					$("#animationWindow").removeClass("showflex");
-					$("#animationWindow").addClass("hide");
-
-					$("#loginStatusTxt").text("Email already in use! Please Login.");
-					$("#loginStatusTxt").addClass("show");
-
 				}
 
 			} else {
-
-				console.log("FILL IN");
+				
 				// ERROR
 				$("#loginStatusTxt").text("Please fill in all fields!");
 				$("#loginStatusTxt").addClass("show");
 
 			}
-
-			console.log(loopCount);
 
 		}
 
