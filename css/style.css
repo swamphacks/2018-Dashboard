@@ -39,6 +39,19 @@
   margin-right: 10px;
 }
 
+.underline-btn {
+  /*border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #1C3444;*/
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+.underline-btn:hover,
+.underline-btn:focus {
+  cursor: pointer;
+}
+
 .pass-visibility:hover,
 .pass-visibility:focus {
   cursor: pointer;

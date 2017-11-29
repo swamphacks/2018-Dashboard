@@ -62,7 +62,7 @@
 							</div>
 
 							<div class="col-md-12 top-margin">
-								<label class="form-lbl" for="q1" name="">Password</label>
+								<label class="form-lbl" for="q1" name="">Password -<span class="underline-btn" onclick="resetPasswordClicked()">Forgot?</span></label>
 								<i class="fa fa-lock pass-visibility" aria-hidden="true" id="pv3" onclick="showPassPressed(password, pv3)"></i>
 								<input class="form-field" id="password" name="q1" type="password" placeholder="" required/>
 							</div>
@@ -279,9 +279,46 @@
 				$(".btngroup").addClass("hide");
 				$(".btngroup").removeClass("show");
 
-				console.log("Fill in all fields.");
 			}
 
+		}
+
+		function resetPasswordClicked() {
+
+			console.log("RESET");
+
+			var email = $("#email").val();
+
+			firebase.auth().sendPasswordResetEmail(email).then(function() {
+	      // Password reset email sent.
+
+				$("#loginStatusTxt").text("Reset password email sent! Check your inbox.");
+				$("#loginStatusTxt").addClass("show");
+
+	    }).catch(function(error) {
+	      // Error occurred. Inspect error.code.
+
+				var errorCode = error.code;
+				var errorMessage = error.message;
+
+				if (errorCode.includes("auth/invalid-email")) {
+
+					$("#loginStatusTxt").text("Please provide a valid email below!");
+					$("#loginStatusTxt").addClass("show");
+
+				} else if (errorCode.includes("auth/user-not-found")) {
+
+					$("#loginStatusTxt").text("There is no user associated with that email, did you create an account?");
+					$("#loginStatusTxt").addClass("show");
+
+				} else {
+
+					$("#loginStatusTxt").text("Error sending reset password email.");
+					$("#loginStatusTxt").addClass("show");
+
+				}
+
+	    });
 
 		}
 
