@@ -97,6 +97,10 @@
                       <a href="#" class="pure-menu-link" onclick="menuClick(1)">Dashboard</a>
                     </li>
 
+										<li id="op5" class="pure-menu-item top-ln hide">
+                      <a href="#" class="pure-menu-link" onclick="menuClick(5)">SH Stats</a>
+                    </li>
+
                     <li id="op2" class="pure-menu-item top-ln">
                       <a href="#" class="pure-menu-link" onclick="menuClick(2)">Profile <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                     </li>
@@ -234,7 +238,148 @@
 
       <div id="login" class="hide">
 
-        <h1 class="header-main-type">Login</h1>
+        <h1 class="header-main-type">Stats</h1>
+
+				<div class="container-fluid notif-con">
+					<div class="row">
+
+					<div class="col-md-12">
+						<h3 class="header-sub-type">T-Shirts</h3>
+
+						<p class="descrip-txt"><br>
+							The amount of accepted applicants who selected each size.
+						</p>
+					</div>
+
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Small <span class="statusnew green" id="smallShirts">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Medium <span class="statusnew green" id="mediumShirts">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Large <span class="statusnew green" id="largeShirts">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Extra Large <span class="statusnew green" id="exlargeShirts">--</span></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 top-margin">
+						<h3 class="header-sub-type">Dietary Restrictions</h3>
+
+						<p class="descrip-txt"><br>
+							The amount of accepted applicants who selected each diet.
+						</p>
+					</div>
+
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Vegetarian <span class="statusnew green" id="veges">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Vegan <span class="statusnew green" id="vegs">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Halal <span class="statusnew green" id="hals">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">None <span class="statusnew green" id="nones">--</span></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 top-margin">
+						<h3 class="header-sub-type">Top Schools</h3>
+
+						<p class="descrip-txt"><br>
+							The top ten schools by number of applicants.
+						</p>
+					</div>
+
+					<div class="col-md-12 top-margin">
+					<table class="table">
+					  <thead>
+					    <tr>
+					      <th scope="col" class="greenTxt descrip-txt">School</th>
+					      <th scope="col" class="righttab greenTxt descrip-txt">Applicants</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    <tr>
+					      <td class="descrip-txt school-tab" id="school1">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum1">34</b></td>
+					    </tr>
+					    <tr>
+								<td class="descrip-txt school-tab" id="school2">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum2">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school3">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum3">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school4">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum4">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school5">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum5">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school6">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum6">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school7">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum7">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school8">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum8">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school9">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum9">234</b></td>
+					    </tr>
+							<tr>
+								<td class="descrip-txt school-tab" id="school10">The University of Florida</td>
+					      <td class="descrip-txt righttab"><b id="schoolNum10">234</b></td>
+					    </tr>
+					  </tbody>
+					</table>
+				</div>
+
+				</div>
+			</div>
 
       </div>
 
@@ -243,6 +388,7 @@
   <script src="js/menu.js"></script>
   <script src="js/jquery.js"></script>
   <script src="js/classie.js"></script>
+	<script src="js/jquerycsv.js"></script>
 
   </body>
 
@@ -274,11 +420,39 @@
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var selected = 1;
+		var schools = [];
+		var appliedSchools = [];
+		var schoolsAndCount = {};
+		var topTenSchools = {};
+
+		// Stats
+
+		var numSmalls = 0;
+		var numMeds = 0;
+		var numLarges = 0;
+		var numExLarges = 0;
+
+		var numVege = 0;
+		var numVegan = 0;
+		var numHalal = 0;
+		var numNone = 0;
 
 		if (userObj === null) {
 			window.location.href = "makeaccount.html";
 		} else {
 			$("#mainBody").css("visibility", "visible");
+
+			if (userObj.email === "andrewzhang@ufl.edu" || userObj.email === "pablogarces@ufl.edu" || userObj.email === "sponsors@swamphacks.com") {
+
+				$("#op5").removeClass("hide");
+				$("#op5").addClass("show");
+
+				getStats();
+				reloadStats();
+				getSchools();
+				checkAgainstList();
+
+			}
 		}
 
 		$("#welcomeMessage").text("Welcome, " + userObj.fname + "!");
@@ -500,6 +674,7 @@
         $("#op1").addClass("pure-menu-selected");
         $("#op2").removeClass("pure-menu-selected");
         $("#op3").removeClass("pure-menu-selected");
+				$("#op5").removeClass("pure-menu-selected");
 
         $("#dashboard").addClass("show");
         $("#dashboard").removeClass("hide");
@@ -537,6 +712,7 @@
         $("#op2").addClass("pure-menu-selected");
         $("#op3").removeClass("pure-menu-selected");
         $("#op1").removeClass("pure-menu-selected");
+				$("#op5").removeClass("pure-menu-selected");
 
         $("#dashboard").addClass("hide");
         $("#dashboard").removeClass("show");
@@ -572,21 +748,31 @@
 
       } else if (item === 3) {
 
-        // $("#op3").addClass("pure-menu-selected");
-        // $("#op2").removeClass("pure-menu-selected");
-        // $("#op1").removeClass("pure-menu-selected");
-        //
-        // $("#dashboard").addClass("hide");
-        // $("#dashboard").removeClass("show");
-        //
-        // $("#info").addClass("hide");
-        // $("#info").removeClass("show");
-
 				// Show the confirm logout popup
 				$("#confirmLogoutPopup").removeClass("hide");
 				$("#confirmLogoutPopup").addClass("showflex");
 
-      }
+      } else if (item === 5) {
+
+				$("#op5").addClass("pure-menu-selected");
+        $("#op2").removeClass("pure-menu-selected");
+        $("#op1").removeClass("pure-menu-selected");
+
+        $("#dashboard").addClass("hide");
+        $("#dashboard").removeClass("show");
+
+        $("#info").addClass("hide");
+        $("#info").removeClass("show");
+
+				$("#login").addClass("show");
+        $("#login").removeClass("hide");
+
+				getStats();
+				reloadStats();
+				getSchools();
+				checkAgainstList();
+
+			}
     }
 
 		function denyLogoutClicked() {
@@ -613,6 +799,200 @@
 
 		}
 
+		function reloadStats() {
+
+			$("#smallShirts").text(numSmalls);
+			$("#mediumShirts").text(numMeds);
+			$("#largeShirts").text(numLarges);
+			$("#exlargeShirts").text(numExLarges);
+
+			$("#veges").text(numVege);
+			$("#vegs").text(numVegan);
+			$("#hals").text(numHalal);
+			$("#nones").text(numNone);
+
+		}
+
+		function getStats() {
+
+			numSmalls = 0;
+			numMeds = 0;
+			numLarges = 0;
+			numExLarges = 0;
+
+			numVege = 0;
+			numVegan = 0;
+			numHalal = 0;
+			numNone = 0;
+
+			acceptedRef.orderByChild("tshirtSize").equalTo("small").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numSmalls = numSmalls + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("tshirtSize").equalTo("medium").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numMeds = numMeds + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("tshirtSize").equalTo("large").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numLarges = numLarges + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("tshirtSize").equalTo("extraLarge").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numExLarges = numExLarges + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("dietaryRestriction").equalTo("none").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numNone = numNone + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("dietaryRestriction").equalTo("vegetarian").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numVege = numVege + 1;
+
+				 });
+
+			});
+
+			acceptedRef.orderByChild("dietaryRestriction").equalTo("vegan").on("value", function(snapshot) {
+
+				 snapshot.forEach(function(childSnapshot) {
+
+					 numVegan = numVegan + 1;
+
+				 });
+
+			});
+
+			acceptedRef.on('value', function(snapshot) {
+
+				var index = 0;
+
+				snapshot.forEach(function(childSnapshot) {
+
+				index = index + 1;
+
+ 			  var currSchool = childSnapshot.val().school;
+
+				appliedSchools[index] = currSchool;
+
+ 			  });
+
+			})
+
+		}
+
+		function getSchools() {
+
+			$(document).ready(function() {
+				 "use strict";
+					$.ajax({
+							type: "GET",
+							url: "https://raw.githubusercontent.com/MLH/mlh-policies/master/schools.csv",
+							dataType: "text",
+							success: function(data) {
+								processData(data);
+
+							}
+					 });
+			});
+
+		}
+
+		function checkAgainstList() {
+
+			var iterator = function (element) {
+			    schoolsAndCount[element] = (schoolsAndCount[element] || 0) + 1;
+			}
+
+			if (appliedSchools.forEach) {
+			    appliedSchools.forEach(function (element) {
+			        iterator(element);
+			    });
+			} else {
+			    for (var i = 0; i < appliedSchools.length; i++) {
+			        iterator(appliedSchools[i]);
+			    }
+			}
+
+			// Create items array
+			var items = Object.keys(schoolsAndCount).map(function(key) {
+			    return [key, schoolsAndCount[key]];
+			});
+
+			// Sort the array based on the second element
+			items.sort(function(first, second) {
+			    return second[1] - first[1];
+			});
+
+			topTenSchools = items.slice(0, 10);
+
+			$("#school1").text(topTenSchools[0][0]);
+			$("#school2").text(topTenSchools[1][0]);
+			$("#school3").text(topTenSchools[2][0]);
+			$("#school4").text(topTenSchools[3][0]);
+			$("#school5").text(topTenSchools[4][0]);
+			$("#school6").text(topTenSchools[5][0]);
+			$("#school7").text(topTenSchools[6][0]);
+			$("#school8").text(topTenSchools[7][0]);
+			$("#school9").text(topTenSchools[8][0]);
+			$("#school10").text(topTenSchools[9][0]);
+
+			$("#schoolNum1").text(topTenSchools[0][1]);
+			$("#schoolNum2").text(topTenSchools[1][1]);
+			$("#schoolNum3").text(topTenSchools[2][1]);
+			$("#schoolNum4").text(topTenSchools[3][1]);
+			$("#schoolNum5").text(topTenSchools[4][1]);
+			$("#schoolNum6").text(topTenSchools[5][1]);
+			$("#schoolNum7").text(topTenSchools[6][1]);
+			$("#schoolNum8").text(topTenSchools[7][1]);
+			$("#schoolNum9").text(topTenSchools[8][1]);
+			$("#schoolNum10").text(topTenSchools[9][1]);
+
+
+			console.log(topTenSchools);
+
+
+		}
+
+		function processData(data) {
+
+				"use strict";
+				schools = $.csv.toArrays(data);
+
+		}
+
 		function fixTitle() {
 
 			var $this = $(".stickyheader");
@@ -626,6 +1006,10 @@
 			} else if (selected === 1) {
 
 				$("#headertxt").text("Dashboard");
+			} else if (selected == 5) {
+
+				$("#headertxt").text("Stats");
+
 			}
 
 			if (scrollTop > (84 - 50)) {
