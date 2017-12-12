@@ -449,8 +449,6 @@
 
 				getStats();
 				reloadStats();
-				getSchools();
-				checkAgainstList();
 
 			}
 		}
@@ -767,9 +765,12 @@
 				$("#login").addClass("show");
         $("#login").removeClass("hide");
 
+				appliedSchools = [];
+				schoolsAndCount = {};
+				topTenSchools = {};
+
 				getStats();
 				reloadStats();
-				getSchools();
 				checkAgainstList();
 
 			}
@@ -958,32 +959,31 @@
 
 			topTenSchools = items.slice(0, 10);
 
-			$("#school1").text(topTenSchools[0][0]);
-			$("#school2").text(topTenSchools[1][0]);
-			$("#school3").text(topTenSchools[2][0]);
-			$("#school4").text(topTenSchools[3][0]);
-			$("#school5").text(topTenSchools[4][0]);
-			$("#school6").text(topTenSchools[5][0]);
-			$("#school7").text(topTenSchools[6][0]);
-			$("#school8").text(topTenSchools[7][0]);
-			$("#school9").text(topTenSchools[8][0]);
-			$("#school10").text(topTenSchools[9][0]);
+			if (topTenSchools !== undefined) {
 
-			$("#schoolNum1").text(topTenSchools[0][1]);
-			$("#schoolNum2").text(topTenSchools[1][1]);
-			$("#schoolNum3").text(topTenSchools[2][1]);
-			$("#schoolNum4").text(topTenSchools[3][1]);
-			$("#schoolNum5").text(topTenSchools[4][1]);
-			$("#schoolNum6").text(topTenSchools[5][1]);
-			$("#schoolNum7").text(topTenSchools[6][1]);
-			$("#schoolNum8").text(topTenSchools[7][1]);
-			$("#schoolNum9").text(topTenSchools[8][1]);
-			$("#schoolNum10").text(topTenSchools[9][1]);
+				$("#school1").text(topTenSchools[0][0]);
+				$("#school2").text(topTenSchools[1][0]);
+				$("#school3").text(topTenSchools[2][0]);
+				$("#school4").text(topTenSchools[3][0]);
+				$("#school5").text(topTenSchools[4][0]);
+				$("#school6").text(topTenSchools[5][0]);
+				$("#school7").text(topTenSchools[6][0]);
+				$("#school8").text(topTenSchools[7][0]);
+				$("#school9").text(topTenSchools[8][0]);
+				$("#school10").text(topTenSchools[9][0]);
 
+				$("#schoolNum1").text(topTenSchools[0][1]);
+				$("#schoolNum2").text(topTenSchools[1][1]);
+				$("#schoolNum3").text(topTenSchools[2][1]);
+				$("#schoolNum4").text(topTenSchools[3][1]);
+				$("#schoolNum5").text(topTenSchools[4][1]);
+				$("#schoolNum6").text(topTenSchools[5][1]);
+				$("#schoolNum7").text(topTenSchools[6][1]);
+				$("#schoolNum8").text(topTenSchools[7][1]);
+				$("#schoolNum9").text(topTenSchools[8][1]);
+				$("#schoolNum10").text(topTenSchools[9][1]);
 
-			console.log(topTenSchools);
-
-
+			}
 		}
 
 		function processData(data) {
