@@ -194,7 +194,7 @@
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		$("form").submit(function() { return false; });
 
-    if (userObj.isVolunteer === undefined || userObj.isVolunteer === false) {
+    if (userObj === null || userObj === undefined || userObj.isVolunteer === undefined || userObj.isVolunteer === false) {
 
       // Only volunteers and admin can access this page
       window.location.href = "index.html";
