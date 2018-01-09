@@ -155,7 +155,7 @@
 
 		console.log(userObj);
 
-    if (userObj.isVolunteer === undefined || userObj.isVolunteer === false || userObj === null || userObj === undefined) {
+		if (userObj === null || userObj === undefined || userObj.isVolunteer === undefined || userObj.isVolunteer === false) {
 
       // Only volunteers and admin can access this page
       window.location.href = "index.html";
