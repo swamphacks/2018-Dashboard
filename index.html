@@ -115,6 +115,12 @@
                 </ul>
 
               </div>
+
+							<div id="sign-in-link" class="hide">
+								<!-- <i class="fa fa-pencil" aria-hidden="true"></i> -->
+								<a href="checkin.html" target="_blank">Event Sign In</a>
+							</div>
+
           </div>
       </div>
 
@@ -449,6 +455,14 @@
 
 				getStats();
 				reloadStats();
+
+			}
+
+			if (userObj.isVolunteer !== undefined && userObj.isVolunteer === true) {
+
+				// Show link to event check in page
+				$("#sign-in-link").removeClass("hide");
+				$("#sign-in-link").addClass("show");
 
 			}
 		}
