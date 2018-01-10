@@ -1139,6 +1139,25 @@ td b {
   opacity: 0.6;
 }
 
+.circle-ticker {
+  height: 10px !important;
+  width: 10px !important;
+  border-radius: 5px;
+  background-color: green;
+  margin-left: 20px;
+  margin-top: 10px;
+  position: absolute;
+}
+
+.live-ticker {
+  font-size: 14px;
+  color: green;
+  margin-left: 35px;
+  padding-top: 8px;
+  font-weight: bold;
+  position: absolute;
+}
+
 @media (min-width: 48em) {
 
   .notif {

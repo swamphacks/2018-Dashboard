@@ -250,6 +250,91 @@
 					<div class="row">
 
 					<div class="col-md-12">
+						<h3 class="header-sub-type">Overall Stats<span class="circle-ticker"></span><span class="live-ticker">LIVE</span></h3>
+					</div>
+
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Check Ins <span class="statusnew green" id="checkIns">--</span></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 top-margin">
+						<h3 class="header-sub-type">Events Stats<span class="circle-ticker"></span><span class="live-ticker">LIVE</span></h3>
+
+						<p class="descrip-txt"><br>
+							Amount of people in each team.
+						</p>
+					</div>
+
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Dragonflies <span class="statusnew green" id="teamOneSize">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Turtles <span class="statusnew green" id="teamTwoSize">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Herons <span class="statusnew green" id="teamThreeSize">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Gators <span class="statusnew green" id="teamFourSize">--</span></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 top-margin">
+						<p class="descrip-txt"><br>
+							Amount of points each team currently has.
+						</p>
+					</div>
+
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Dragonflies <span class="statusnew green" id="teamOnePoints">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Turtles <span class="statusnew green" id="teamTwoPoints">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Herons <span class="statusnew green" id="teamThreePoints">--</span></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 top-margin">
+						<div class="padder">
+							<div class="notifnew">
+								<p class="notif-txt stat-txt">Gators <span class="statusnew green" id="teamFourPoints">--</span></p>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-12 top-margin">
 						<h3 class="header-sub-type">T-Shirts</h3>
 
 						<p class="descrip-txt"><br>
@@ -423,6 +508,7 @@
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
 		var acceptedRef = ref.child("accepted");
+		var checkedInRef = ref.child("confirmed");
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var selected = 1;
@@ -466,6 +552,12 @@
 
 			}
 		}
+
+		checkedInRef.on('value', function(snapshot) {
+
+      $("#checkIns").text(snapshot.numChildren());
+
+    });
 
 		$("#welcomeMessage").text("Welcome, " + userObj.fname + "!");
 		$("#userEmail").val(userObj.email);
