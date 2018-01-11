@@ -80,6 +80,10 @@
 								<button class="button txtbtnouter"><a href="eventregistration.html"><p class="textbtn"><b>or Create Account</b></p></a></button>
 							</div>
 
+							<!-- <div class="col-md-12 top-margin">
+								<button class="button txtbtnouter" onclick="addEventDataClicked()"><a><p class="textbtn"><b>Add Events Data in DB</b></p></a></button>
+							</div> -->
+
 							<div class="col-md-12 descrip-txt login-txt">
 								Please check in with the email you applied with!
 							</div>
@@ -101,12 +105,12 @@
 
 				<div class="top-blk">
 
-					<div class="top-txt">CHECK</div>
+					<div id="top-txt" class="top-txt">CHECK</div>
 
 				</div>
 				<div class="bottom-blk">
 
-					<div class="bottom-txt">IN</div>
+					<div id="bottom-txt" class="bottom-txt">IN</div>
 
 				</div>
 
@@ -147,13 +151,16 @@
 		var usersRef = ref.child("applicants");
 		var checkedInRef = ref.child("confirmed");
 		var acceptedRef = ref.child("accepted");
+		var eventsRef = ref.child("events");
     var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var checkedInUser;
 		var clickedBtn = false;
+		var topSchoolsDisplay = ["GT", "UF", "FSU", "WATERLOO", "FIU", "USF", "UCF", "FIT", "GSU", "IIT", "UM", "DUKE", "UA", "UTD", "FPOLY", "ERAU", "NU", "ALL"];
 		$("#loginForm").submit(function() { return false; });
 
 		console.log(userObj);
+		loopInfo(topSchoolsDisplay);
 
 		if (userObj === null || userObj === undefined || userObj.isVolunteer === undefined || userObj.isVolunteer === false) {
 
@@ -162,11 +169,40 @@
 
     }
 
+		function loopInfo(text) {
+
+			$("#top-txt").text("CHECK");
+			$("#bottom-txt").text("IN");
+
+			setTimeout(function() {
+				loopText(topSchoolsDisplay);
+			}, 10000);
+
+		}
+
+		function loopText(text) {
+
+			var i = 0;
+			$("#top-txt").text("WELCOME");
+
+    	function printEntry() {
+        console.log(text[i]);
+				$("#bottom-txt").text(text[i]);
+        i++; // Increment the position
+        if (i < text.length) { // If there are more chars, schedule another
+          setTimeout(printEntry, 800);
+        } else {
+					setTimeout(function() {
+					  loopInfo();
+					}, 10000);
+				}
+    	}
+
+    	printEntry(); // Print the first entry/char
+
+		}
+
     function loginBtnClicked() {
-
-			console.log("CLICKED MATE");
-
-			//document.getElementById("loginBtnCheckIn").disabled = true;
 
 			var email = $("#email").val();
 			var password = $("#password").val();
@@ -350,7 +386,6 @@
 										setTimeout(function() {
 
 											// Reload form for next check in
-											//document.getElementById("loginBtnCheckIn").disabled = false;
 											location.reload();
 
 										}, delay);
@@ -559,6 +594,85 @@
 				$(icon).addClass("fa-lock");
 				$(icon).removeClass("fa-unlock-alt");
 			}
+
+		}
+
+		var points = {
+
+			gators: 200,
+			dragonflies: 200,
+			turtles: 200,
+			herons: 200
+
+		}
+
+		var people = {
+
+			gators: 20,
+			dragonflies: 20,
+			turtles: 20,
+			herons: 20
+
+		}
+
+		var pointsOverall = {
+
+			gators: 200,
+			dragonflies: 200,
+			turtles: 200,
+			herons: 200
+
+		}
+
+		var peopleOverall = {
+
+			gators: 20,
+			dragonflies: 20,
+			turtles: 20,
+			herons: 20
+
+		}
+
+		var attendants = {
+
+			people: people,
+			points: points
+
+		}
+
+		var eventsData = {
+
+			people: peopleOverall,
+			points: pointsOverall
+
+		}
+
+		function addEventsClicked() {
+
+			eventsRef.push({
+
+				name: "sample",
+				image: "sample",
+				description: "sample",
+				start_time: "sample",
+				end_time: "sample",
+				location: "sample",
+				type: "sample",
+				company: "sample",
+				day: "sample",
+				attendants: attendants
+
+			});
+
+		}
+
+		function addEventDataClicked() {
+
+			ref.update({
+
+				eventsData
+
+			});
 
 		}
 

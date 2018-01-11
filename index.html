@@ -509,6 +509,7 @@
 		var usersRef = ref.child("applicants");
 		var acceptedRef = ref.child("accepted");
 		var checkedInRef = ref.child("confirmed");
+		var eventsDataRef = ref.child("eventsData");
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var selected = 1;
@@ -556,6 +557,24 @@
 		checkedInRef.on('value', function(snapshot) {
 
       $("#checkIns").text(snapshot.numChildren());
+
+    });
+
+		eventsDataRef.on('value', function(snapshot) {
+
+			var info = snapshot.val();
+
+			// Sizes
+      $("#teamOneSize").text(info.people.dragonflies);
+			$("#teamTwoSize").text(info.people.turtles);
+			$("#teamThreeSize").text(info.people.herons);
+			$("#teamFourSize").text(info.people.gators);
+
+			// Points
+			$("#teamOnePoints").text(info.points.dragonflies);
+			$("#teamTwoPoints").text(info.points.turtles);
+			$("#teamThreePoints").text(info.points.herons);
+			$("#teamFourPoints").text(info.points.gators);
 
     });
 
