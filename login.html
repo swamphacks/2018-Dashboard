@@ -166,15 +166,11 @@
 							// Delay before checking
 							acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-								console.log("Checking user");
-
 								 // Getting the info of the found user and storing it in local storage
 								 snapshot.forEach(function(childSnapshot) {
 
 									 var key = childSnapshot.key;
 									 var childData = childSnapshot.val();
-									 console.log(childData);
-									 console.log(key);
 
 									 localStorage.setItem('loggedInUser', JSON.stringify(childData));
 									 localStorage.setItem('loggedInUserKey', key);
@@ -184,8 +180,6 @@
 							});
 
 							firebase.auth().onAuthStateChanged(function(user) {
-
-								console.log("User verified!");
 
 								if (user.emailVerified) {
 
@@ -285,8 +279,6 @@
 
 		function resetPasswordClicked() {
 
-			console.log("RESET");
-
 			var email = $("#email").val();
 
 			firebase.auth().sendPasswordResetEmail(email).then(function() {
@@ -327,7 +319,6 @@
 			firebase.auth().onAuthStateChanged(function(user) {
 
 				if (!user.emailVerified) {
-					console.log("Email sent!");
 					user.sendEmailVerification();
 					$("#resendBtn").text("Email Sent!");
 					$("#resendBtn").addClass("disabled");
@@ -335,7 +326,6 @@
 				} else {
 					$("#resendBtn").text("Already Verified!");
 					$("#resendBtn").addClass("disabled");
-					console.log("Email NOT sent!");
 				}
 
 			});
@@ -349,8 +339,6 @@
 
 			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-				console.log("Checking user");
-
 				 snapshot.forEach(function(childSnapshot) {
 
 					 var key = childSnapshot.key;
@@ -362,26 +350,18 @@
 
 			});
 
-			console.log(cD);
-			console.log(k);
-
 			if (cD !== undefined) {
 
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
-			 console.log("User Exists.");
 
 			 return true;
 
 		 } else if (cD === undefined) {
 
-			 console.log("User Does NOT Exist.");
-
 			 return false;
 
 		 } else {
-
-			 console.log("User Does NOT Exist.");
 
 			 return false;
 		 }

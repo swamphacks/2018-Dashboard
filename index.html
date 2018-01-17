@@ -578,6 +578,18 @@
 
     });
 
+		// fadeDot();
+    //
+		// function fadeDot() {
+    //
+		// 	$(".circle-ticker").fadeOut();
+		// 	setTimeout(function() {
+		// 		$(".circle-ticker").fadeIn();
+		// 		fadeDot();
+		// 	}, 1400);
+    //
+		// }
+
 		$("#welcomeMessage").text("Welcome, " + userObj.fname + "!");
 		$("#userEmail").val(userObj.email);
 		document.getElementById("userEmail").disabled = true;
@@ -920,7 +932,6 @@
 
 			}, function(error) {
 				// An error happened.
-				console.log("Error Logging out.");
 			});
 
 		}

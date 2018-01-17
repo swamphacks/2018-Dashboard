@@ -223,26 +223,10 @@
 							// Delay before checking
 							acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-								console.log("Checking user");
-
-								 // Getting the info of the found user and storing it in local storage
-								 // snapshot.forEach(function(childSnapshot) {
-                 //
-									//  var key = childSnapshot.key;
-									//  var childData = childSnapshot.val();
-									//  console.log(childData);
-									//  console.log(key);
-                 //
-									//  localStorage.setItem('loggedInUser', JSON.stringify(childData));
-									//  localStorage.setItem('loggedInUserKey', key);
-                 //
-								 // });
 
 							});
 
 							firebase.auth().onAuthStateChanged(function(user) {
-
-								console.log("User verified!");
 
 								if (user.emailVerified) {
 
@@ -351,8 +335,6 @@
 
 		function resetPasswordClicked() {
 
-			console.log("RESET");
-
 			var email = $("#email").val();
 
 			firebase.auth().sendPasswordResetEmail(email).then(function() {
@@ -393,7 +375,6 @@
 			firebase.auth().onAuthStateChanged(function(user) {
 
 				if (!user.emailVerified) {
-					console.log("Email sent!");
 					user.sendEmailVerification();
 					$("#resendBtn").text("Email Sent!");
 					$("#resendBtn").addClass("disabled");
@@ -401,7 +382,6 @@
 				} else {
 					$("#resendBtn").text("Already Verified!");
 					$("#resendBtn").addClass("disabled");
-					console.log("Email NOT sent!");
 				}
 
 			});
@@ -415,8 +395,6 @@
 
 			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-				console.log("Checking user");
-
 				 snapshot.forEach(function(childSnapshot) {
 
 					 var key = childSnapshot.key;
@@ -428,26 +406,18 @@
 
 			});
 
-			console.log(cD);
-			console.log(k);
-
 			if (cD !== undefined) {
 
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
-			 console.log("User Exists.");
 
 			 return true;
 
 		 } else if (cD === undefined) {
 
-			 console.log("User Does NOT Exist.");
-
 			 return false;
 
 		 } else {
-
-			 console.log("User Does NOT Exist.");
 
 			 return false;
 		 }
@@ -491,23 +461,15 @@
 
 			if (password !== "" && confirmPassword !== "" && email !== "") {
 
-				console.log("STEP 1");
-
 				if ((confirmPassword === password)) {
-
-					console.log("STEP 2");
 
 					// Creating user in firebase
 					firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-
-						console.log("STEP 3");
 
 							// You can save the user data here.
 
 							// Adding to DB
 							if (validateEmail(email)) {
-
-								console.log("STEP 4");
 
 								checkedInRef.push({
 
@@ -522,11 +484,7 @@
 
 								});
 
-								console.log('Success! Applicant Added.');
-
 							} else {
-
-								console.log('Not a valid email.');
 							}
 
 							// STATUS
@@ -545,9 +503,6 @@
 
 							var errorCode = error.code;
 							var errorMessage = error.message;
-
-							console.log("There was an error.");
-							console.log(errorCode + ' - ' + errorMessage);
 
 							// Handling different types of errors
 
@@ -580,8 +535,6 @@
 
 				} else {
 
-					console.log("PASSWORDS NOT SAME");
-
 					// ERROR
 					$("#loginStatusTxt-register").text("Passwords do not match!");
 					$("#loginStatusTxt-register").addClass("show");
@@ -589,8 +542,6 @@
 				}
 
 			} else {
-
-				console.log("FILL IN ALL");
 
 				// ERROR
 				$("#loginStatusTxt-register").text("Please fill in all fields!");

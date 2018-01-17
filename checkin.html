@@ -81,7 +81,7 @@
 							</div>
 
 							<!-- <div class="col-md-12 top-margin">
-								<button class="button txtbtnouter" onclick="addEventDataClicked()"><a><p class="textbtn"><b>Add Events Data in DB</b></p></a></button>
+								<button class="button txtbtnouter" onclick="addAnnouncement()"><a><p class="textbtn"><b>Add Events Data in DB</b></p></a></button>
 							</div> -->
 
 							<div class="col-md-12 descrip-txt login-txt">
@@ -152,6 +152,8 @@
 		var checkedInRef = ref.child("confirmed");
 		var acceptedRef = ref.child("accepted");
 		var eventsRef = ref.child("events");
+		var sponsorRef = ref.child("sponsors");
+		var announcementsRef = ref.child("announcements");
     var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var checkedInUser;
@@ -159,7 +161,6 @@
 		var topSchoolsDisplay = ["GT", "UF", "FSU", "WATERLOO", "FIU", "USF", "UCF", "FIT", "GSU", "IIT", "UM", "DUKE", "UA", "UTD", "FPOLY", "ERAU", "NU", "ALL"];
 		$("#loginForm").submit(function() { return false; });
 
-		console.log(userObj);
 		loopInfo(topSchoolsDisplay);
 
 		if (userObj === null || userObj === undefined || userObj.isVolunteer === undefined || userObj.isVolunteer === false) {
@@ -186,7 +187,6 @@
 			$("#top-txt").text("WELCOME");
 
     	function printEntry() {
-        console.log(text[i]);
 				$("#bottom-txt").text(text[i]);
         i++; // Increment the position
         if (i < text.length) { // If there are more chars, schedule another
@@ -224,8 +224,6 @@
 							// Delay before checking
 							acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-								console.log("Checking user");
-
 								 // Getting the info of the found user and storing it in local storage
 								 snapshot.forEach(function(childSnapshot) {
 
@@ -241,128 +239,9 @@
 
 							});
 
-							// \/ Might need this later \/
-
-							// firebase.auth().onAuthStateChanged(function(user) {
-              //
-							// 	console.log("User verified!");
-              //
-							// 	if (user.emailVerified && clickedBtn === false) {
-              //
-							// 		if (JSON.parse(localStorage.getItem('checkedInUser')) !== undefined) {
-              //
-							// 			checkedInRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
-              //
-							// 				console.log("Checking user in confirmed");
-              //
-							// 				 // Getting the info of the found user and storing it in local storage
-              //
-							// 				 if (snapshot.val() === null || snapshot.val() === undefined) {
-              //
-							// 					 // SUCCESS
-							// 					$("#loginStatusTxt").text("Checked in!");
-							// 					$("#loginStatusTxt").addClass("show");
-              //
-							// 					clickedBtn === true;
-              //
-							// 					console.log(checkedInUser);
-							// 					console.log("PUSHING");
-              //
-							// 					var pushKey = checkedInRef.push().key;
-              //
-							// 					checkedInRef.update({
-							// 						 [pushKey] : checkedInUser
-							// 					});
-              //
-							// 					setTimeout(function() {
-              //
-							// 						// Reload form for next check in
-							// 						document.getElementById("loginBtnCheckIn").disabled = false;
-							// 						//location.reload();
-              //
-							// 					}, delay);
-              //
-							// 				} else {
-              //
-							// 					// ERROR
-							// 					$("#loginStatusTxt").text("Already checked in!");
-							// 					$("#loginStatusTxt").addClass("show");
-							// 				}
-              //
-              //
-							// 				//  snapshot.forEach(function(childSnapshot) {
-              //         //
-							// 				// 	 if (childSnapshot.val() === undefined) {
-              //         //
-							// 				// 		 // SUCCESS
-							// 				// 		$("#loginStatusTxt").text("Checked in!");
-							// 				// 		$("#loginStatusTxt").addClass("show");
-              //         //
-							// 				// 		 console.log(checkedInUser);
-							// 				// 		 console.log("PUSHING");
-              //         //
-							// 				// 		 checkedInRef.push({
-              //         //
-					 		// 				// 		});
-              //         //
-							// 				// 		setTimeout(function() {
-              //         //
-							// 				// 			// Reload form for next check in
-              //         //
-							// 				// 			location.reload();
-              //         //
-							// 				// 		}, delay);
-              //         //
-							// 				// 	} else {
-              //         //
-							// 				// 		// ERROR
-							// 				// 		$("#loginStatusTxt").text("Already checked in!");
-							// 				// 		$("#loginStatusTxt").addClass("show");
-							// 				// 	}
-              //         //
-							// 				//  }).catch(function(error) {
-							// 	 	    //   // Error occurred. Inspect error.code.
-              //         //
-							// 	 			// 	var errorCode = error.code;
-							// 	 			// 	var errorMessage = error.message;
-							// 				// 	console.log(errorMessage);
-              //         //
-							// 	 	    // });
-              //
-							// 			});
-              //
-							// 		} else {
-              //
-							// 			console.log("No one checked in");
-							// 		}
-              //
-							// 		// Hide the loader
-							// 		$("#animationWindow").removeClass("showflex");
-							// 		$("#animationWindow").addClass("hide");
-              //
-              //
-							// 	} else if (!user.emailVerified) {
-              //
-							// 		// Hide the loader
-							// 		$("#animationWindow").removeClass("showflex");
-							// 		$("#animationWindow").addClass("hide");
-              //
-							// 		// ERROR
-							// 		$("#statusWithBtn").text("Email not verified! Check your inbox, it could take up to 10 minutes.");
-							// 		$(".btngroup").addClass("show");
-              //
-							// 		$("#loginStatusTxt").addClass("hide");
-							// 		$("#loginStatusTxt").removeClass("show");
-              //
-							// 	}
-              //
-							// });
-
 							if (JSON.parse(localStorage.getItem('checkedInUser')) !== undefined) {
 
 								checkedInRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
-
-									console.log("Checking user in confirmed");
 
 									 // Getting the info of the found user and storing it in local storage
 
@@ -373,9 +252,6 @@
 										$("#loginStatusTxt").addClass("show");
 
 										clickedBtn === true;
-
-										console.log(checkedInUser);
-										console.log("PUSHING");
 
 										var pushKey = checkedInRef.push().key;
 
@@ -400,8 +276,6 @@
 								});
 
 							} else {
-
-								console.log("No one checked in");
 							}
 
 							// Hide the loader
@@ -480,8 +354,6 @@
 
 		function resetPasswordClicked() {
 
-			console.log("RESET");
-
 			var email = $("#email").val();
 
 			firebase.auth().sendPasswordResetEmail(email).then(function() {
@@ -522,7 +394,6 @@
 			firebase.auth().onAuthStateChanged(function(user) {
 
 				if (!user.emailVerified) {
-					console.log("Email sent!");
 					user.sendEmailVerification();
 					$("#resendBtn").text("Email Sent!");
 					$("#resendBtn").addClass("disabled");
@@ -530,7 +401,6 @@
 				} else {
 					$("#resendBtn").text("Already Verified!");
 					$("#resendBtn").addClass("disabled");
-					console.log("Email NOT sent!");
 				}
 
 			});
@@ -544,8 +414,6 @@
 
 			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-				console.log("Checking user");
-
 				 snapshot.forEach(function(childSnapshot) {
 
 					 var key = childSnapshot.key;
@@ -557,26 +425,18 @@
 
 			});
 
-			console.log(cD);
-			console.log(k);
-
 			if (cD !== undefined) {
 
 			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
 			 localStorage.setItem('loggedInUserKey', k);
-			 console.log("User Exists.");
 
 			 return true;
 
 		 } else if (cD === undefined) {
 
-			 console.log("User Does NOT Exist.");
-
 			 return false;
 
 		 } else {
-
-			 console.log("User Does NOT Exist.");
 
 			 return false;
 		 }
@@ -617,19 +477,19 @@
 
 		var pointsOverall = {
 
-			gators: 200,
-			dragonflies: 200,
-			turtles: 200,
-			herons: 200
+			gators: 0,
+			dragonflies: 0,
+			turtles: 0,
+			herons: 0
 
 		}
 
 		var peopleOverall = {
 
-			gators: 20,
-			dragonflies: 20,
-			turtles: 20,
-			herons: 20
+			gators: 0,
+			dragonflies: 0,
+			turtles: 0,
+			herons: 0
 
 		}
 
@@ -651,26 +511,75 @@
 
 			eventsRef.push({
 
-				name: "sample",
-				image: "sample",
-				description: "sample",
-				start_time: "sample",
-				end_time: "sample",
-				location: "sample",
-				type: "sample",
-				company: "sample",
-				day: "sample",
+				name: "Closing Ceremonies",
+				image: "",
+				description: "",
+				startTime: "1516563600",
+				endTime: "1516568400",
+				location: "",
+				type: "Logistics",
+				company: "",
+				day: "Sunday",
 				attendants: attendants
 
 			});
 
 		}
 
-		function addEventDataClicked() {
+		var rep1 = {
+			image: "",
+			name: "FName LName"
+		}
+
+		var rep2 = {
+			image: "",
+			name: "FName LName"
+		}
+
+		var reps = {
+
+			rep1,
+			rep2
+
+		}
+
+		var AmericanExpress = {
+
+			description: "",
+			link: "https://www.americanexpress.com/",
+			location: "New York City, NY",
+			logo: "",
+			name: "American Express",
+			tier: "Turtle",
+			priority: 0,
+			reps: reps
+
+		}
+
+		var announcements = {
+
+			test: "string"
+		}
+
+		function addAnnouncement() {
+
+			announcementsRef.push({
+
+				name: "Title Three",
+				time: 1516563600,
+				description: "Description text three",
+				type: "food"
+
+			});
+
+
+		}
+
+		function addSponsor() {
 
 			ref.update({
 
-				eventsData
+				announcements
 
 			});
 

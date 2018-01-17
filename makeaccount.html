@@ -255,7 +255,7 @@
 
 									}, function(error) {
 
-										if (error !== null) { console.log(error); }
+										if (error !== null) {  }
 
 									});
 
@@ -263,9 +263,6 @@
 
 									var errorCode = error.code;
 									var errorMessage = error.message;
-
-									console.log("There was an error.");
-									console.log(errorCode + ' - ' + errorMessage);
 
 									// Handling different types of errors
 
@@ -334,7 +331,6 @@
 												$("#loginStatusTxt").addClass("show");
 
 											} else {
-													console.log(errorMessage);
 											}
 
 									});
