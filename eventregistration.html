@@ -458,6 +458,8 @@
 			var yearVal = $("#year").val();
 			var password = $("#password").val();
 			var confirmPassword = $("#confirmPassword").val();
+			myArray = ["herons", "gators", "turtles", "dragonflies"]
+			var iteam = myArray[Math.floor(Math.random() * myArray.length)];
 
 			if (password !== "" && confirmPassword !== "" && email !== "") {
 
@@ -467,10 +469,10 @@
 					firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
 
 							// You can save the user data here.
+							
 
 							// Adding to DB
 							if (validateEmail(email)) {
-
 								checkedInRef.push({
 
 									fname: fnameVal,
@@ -480,7 +482,8 @@
 									school: schoolVal,
 									year: yearVal,
 									subscribedToMail: "false",
-									isVolunteer: "false"
+									isVolunteer: false,
+									team: iteam
 
 								});
 
