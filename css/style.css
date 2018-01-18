@@ -1024,6 +1024,10 @@ td b {
   justify-content: center;
 }
 
+.welcome {
+  margin-left: 0px !important;
+}
+
 .top-txt {
   font-size: 12em;
   text-align: center;
@@ -1149,7 +1153,7 @@ td b {
   position: absolute;
   -webkit-transition: opacity 0.8s;
   -moz-transition: opacity 0.8s;
-  transition: opacity 0.8s; 
+  transition: opacity 0.8s;
 }
 
 .live-ticker {
