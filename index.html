@@ -156,7 +156,7 @@
 
 						<div class="row">
 							<div class="col-md-12 top-margin" id="confirmCon">
-								<button class="button green" onclick="confirmSpotBtnClicked()">
+								<button id="confirmBtn" class="button green" onclick="confirmSpotBtnClicked()">
 									<p id="confirmSpot">Confirm my spot!</p>
 								</button>
 							</div>
@@ -189,7 +189,7 @@
 
 						<div class="row">
 							<form id="profileForm" class="" autocomplete="off">
-								<div class="col-md-6 top-margin">
+								<div id="shirtCol" class="col-md-6 top-margin">
 									<label class="form-lbl" for="q1" name="">T-Shirt Size *</label>
 									<!-- <input class="form-field" id="shirtSize" name="q1" type="text" placeholder="Medium" required/> -->
 									<select class="form-field" id="shirtSize" required>
@@ -200,7 +200,7 @@
 									</select>
 								</div>
 
-								<div class="col-md-6 top-margin">
+								<div id="dietCol" class="col-md-6 top-margin">
 									<label class="form-lbl" for="q1" name="">Dietary Restrictions *</label>
 									<!-- <input class="form-field" id="diet" name="q1" type="text" placeholder="Halal" required/> -->
 									<select class="form-field" id="diet" required>
@@ -211,7 +211,7 @@
 									</select>
 								</div>
 
-								<div class="col-md-12 top-margin">
+								<div id="extraInfoCol" class="col-md-12 top-margin">
 									<label class="form-lbl" for="q1" name="">Anything else we should know?</label>
 									<input class="form-field" id="extraInfo" name="q1" type="text" placeholder=""/>
 								</div>
@@ -240,7 +240,7 @@
 
 						<div class="row">
 							<div class="col-md-12 top-margin">
-								<button class="button green" onclick="updateInfoBtnClicked()">
+								<button id="updateBtn" class="button green" onclick="updateInfoBtnClicked()">
 									<p>Update Info</p>
 								</button>
 							</div>
@@ -639,18 +639,6 @@
 
     });
 
-		// fadeDot();
-    //
-		// function fadeDot() {
-    //
-		// 	$(".circle-ticker").fadeOut();
-		// 	setTimeout(function() {
-		// 		$(".circle-ticker").fadeIn();
-		// 		fadeDot();
-		// 	}, 1400);
-    //
-		// }
-
 		$("#welcomeMessage").text("Welcome, " + userObj.fname + "!");
 		$("#userEmail").val(userObj.email);
 
@@ -663,30 +651,38 @@
 		document.getElementById("userEmail").disabled = true;
 		document.getElementById("userTeam").disabled = true;
 
-		if (userObj.dietaryRestriction !== undefined || userObj.tshirtSize !== undefined) {
-			$(".fa-exclamation-triangle").addClass("hide");
-			$(".fa-exclamation-triangle").removeClass("showIn");
-		} else {
-			$(".fa-exclamation-triangle").addClass("showIn");
-			$(".fa-exclamation-triangle").removeClass("hide");
+		$(".fa-exclamation-triangle").addClass("hide");
+		$(".fa-exclamation-triangle").removeClass("showIn");
+
+		if (userObj.dietaryRestriction === undefined && userObj.tshirtSize === undefined && userObj.extraInfo === undefined) {
+			$("#profileStatusTxt").addClass("hide");
+			$("#updateBtn").addClass("disabled");
+			$("#confirmBtn").addClass("disabled");
+			$("#rejectSpot").addClass("disabled");
 		}
 
 		if (userObj.dietaryRestriction !== undefined) {
 
 			$("#diet").val(userObj.dietaryRestriction);
 
+		} else {
+			$("#dietCol").addClass("hide");
 		}
 
 		if (userObj.tshirtSize !== undefined) {
 
 			$("#shirtSize").val(userObj.tshirtSize);
 
+		} else {
+			$("#shirtCol").addClass("hide");
 		}
 
 		if (userObj.extraInfo !== undefined) {
 
 			$("#extraInfo").val(userObj.extraInfo);
 
+		} else {
+			$("#extraInfoCol").addClass("hide");
 		}
 
 		if (userObj.status !== undefined) {
@@ -715,117 +711,23 @@
 
 		function rejectSpotBtnClicked() {
 
-			$("#dashStatus").text("NOT ATTENDING");
-			$("#dashStatus").addClass("dark");
-			$("#dashStatus").removeClass("green");
-			$("#confirmCon").addClass("show");
-			$("#confirmCon").removeClass("hide");
-			$("#rejectCon").addClass("hide");
-			$("#rejectCon").removeClass("show");
+			if (userObj.dietaryRestriction === undefined && userObj.tshirtSize === undefined && userObj.extraInfo === undefined) {
 
-			var loggedInUserRef = acceptedRef.child(loggedInUserKey);
+			} else {
 
-			loggedInUserRef.update({
-				status: "NOT ATTENDING"
-			});
-
-			acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
-
-				 // Getting the info of the found user and storing it in local storage
-				 snapshot.forEach(function(childSnapshot) {
-
-					 var key = childSnapshot.key;
-					 var childData = childSnapshot.val();
-					 localStorage.setItem('loggedInUser', JSON.stringify(childData));
-					 localStorage.setItem('loggedInUserKey', key);
-
-					 userObj = JSON.parse(localStorage.getItem('loggedInUser'));
-					 loggedInUserKey = localStorage.getItem('loggedInUserKey');
-
-				 });
-
-			});
-
-		}
-
-		function confirmSpotBtnClicked() {
-
-			var delay = 3000;
-
-			if (userObj.status !== "CONFIRMED") {
-
-				// Show the popup
-				$("#confirmedPopup").removeClass("hide");
-				$("#confirmedPopup").addClass("showflex");
-
-				setTimeout(function() {
-
-					$("#confirmedPopup").removeClass("showflex");
-					$("#confirmedPopup").addClass("hide");
-
-				}, delay);
-
-			}
-
-			$("#dashStatus").text("CONFIRMED");
-			$("#dashStatus").addClass("green");
-			$("#dashStatus").removeClass("dark");
-			$("#confirmCon").addClass("hide");
-			$("#confirmCon").removeClass("show");
-			$("#rejectCon").addClass("show");
-			$("#rejectCon").removeClass("hide");
-
-			var loggedInUserRef = acceptedRef.child(loggedInUserKey);
-
-			loggedInUserRef.update({
-				status: "CONFIRMED"
-			});
-
-			acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
-
-				 // Getting the info of the found user and storing it in local storage
-				 snapshot.forEach(function(childSnapshot) {
-
-					 var key = childSnapshot.key;
-					 var childData = childSnapshot.val();
-					 localStorage.setItem('loggedInUser', JSON.stringify(childData));
-					 localStorage.setItem('loggedInUserKey', key);
-
-					 userObj = JSON.parse(localStorage.getItem('loggedInUser'));
-					 loggedInUserKey = localStorage.getItem('loggedInUserKey');
-
-				 });
-
-			});
-
-		}
-
-		function updateInfoBtnClicked() {
-
-			var dietaryRestriction = $("#diet").val();
-			var tshirtSize = $("#shirtSize").val();
-			var extraInfo = $("#extraInfo").val();
-
-			if (dietaryRestriction !== "" && tshirtSize !== "") {
+				$("#dashStatus").text("NOT ATTENDING");
+				$("#dashStatus").addClass("dark");
+				$("#dashStatus").removeClass("green");
+				$("#confirmCon").addClass("show");
+				$("#confirmCon").removeClass("hide");
+				$("#rejectCon").addClass("hide");
+				$("#rejectCon").removeClass("show");
 
 				var loggedInUserRef = acceptedRef.child(loggedInUserKey);
 
-				if (extraInfo !== "") {
-
-					loggedInUserRef.update({
-						dietaryRestriction: dietaryRestriction,
-						tshirtSize: tshirtSize,
-						extraInfo: extraInfo
-					});
-
-				} else {
-
-					loggedInUserRef.update({
-						dietaryRestriction: dietaryRestriction,
-						tshirtSize: tshirtSize
-					});
-
-				}
+				loggedInUserRef.update({
+					status: "NOT ATTENDING"
+				});
 
 				acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
 
@@ -838,26 +740,138 @@
 						 localStorage.setItem('loggedInUserKey', key);
 
 						 userObj = JSON.parse(localStorage.getItem('loggedInUser'));
-				 		 loggedInUserKey = localStorage.getItem('loggedInUserKey');
+						 loggedInUserKey = localStorage.getItem('loggedInUserKey');
 
 					 });
 
 				});
 
-				// SUCCESS
-				$("#profileStatusTxt").text("Info Updated!");
-				$("#profileStatusTxt").addClass("show");
-				$("#profileStatusTxt").addClass("greenTxt");
-				$("#profileStatusTxt").removeClass("redTxt");
-				$(".fa-exclamation-triangle").addClass("hide");
+			}
+
+		}
+
+		function confirmSpotBtnClicked() {
+
+			if (userObj.dietaryRestriction === undefined && userObj.tshirtSize === undefined && userObj.extraInfo === undefined) {
 
 			} else {
 
-				// ERROR
-				$("#profileStatusTxt").text("Please fill in your t-shirt size and dietary restriction!");
-				$("#profileStatusTxt").addClass("show");
-				$("#profileStatusTxt").addClass("redTxt");
-				$("#profileStatusTxt").removeClass("greenTxt");
+				var delay = 3000;
+
+				if (userObj.status !== "CONFIRMED") {
+
+					// Show the popup
+					$("#confirmedPopup").removeClass("hide");
+					$("#confirmedPopup").addClass("showflex");
+
+					setTimeout(function() {
+
+						$("#confirmedPopup").removeClass("showflex");
+						$("#confirmedPopup").addClass("hide");
+
+					}, delay);
+
+				}
+
+				$("#dashStatus").text("CONFIRMED");
+				$("#dashStatus").addClass("green");
+				$("#dashStatus").removeClass("dark");
+				$("#confirmCon").addClass("hide");
+				$("#confirmCon").removeClass("show");
+				$("#rejectCon").addClass("show");
+				$("#rejectCon").removeClass("hide");
+
+				var loggedInUserRef = acceptedRef.child(loggedInUserKey);
+
+				loggedInUserRef.update({
+					status: "CONFIRMED"
+				});
+
+				acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
+
+					 // Getting the info of the found user and storing it in local storage
+					 snapshot.forEach(function(childSnapshot) {
+
+						 var key = childSnapshot.key;
+						 var childData = childSnapshot.val();
+						 localStorage.setItem('loggedInUser', JSON.stringify(childData));
+						 localStorage.setItem('loggedInUserKey', key);
+
+						 userObj = JSON.parse(localStorage.getItem('loggedInUser'));
+						 loggedInUserKey = localStorage.getItem('loggedInUserKey');
+
+					 });
+
+				});
+
+			}
+
+		}
+
+		function updateInfoBtnClicked() {
+
+			if (userObj.dietaryRestriction === undefined && userObj.tshirtSize === undefined && userObj.extraInfo === undefined) {
+
+			} else {
+
+				var dietaryRestriction = $("#diet").val();
+				var tshirtSize = $("#shirtSize").val();
+				var extraInfo = $("#extraInfo").val();
+
+				if (dietaryRestriction !== "" && tshirtSize !== "") {
+
+					var loggedInUserRef = acceptedRef.child(loggedInUserKey);
+
+					if (extraInfo !== "") {
+
+						loggedInUserRef.update({
+							dietaryRestriction: dietaryRestriction,
+							tshirtSize: tshirtSize,
+							extraInfo: extraInfo
+						});
+
+					} else {
+
+						loggedInUserRef.update({
+							dietaryRestriction: dietaryRestriction,
+							tshirtSize: tshirtSize
+						});
+
+					}
+
+					acceptedRef.orderByChild("email").equalTo(userObj.email).on("value", function(snapshot) {
+
+						 // Getting the info of the found user and storing it in local storage
+						 snapshot.forEach(function(childSnapshot) {
+
+							 var key = childSnapshot.key;
+							 var childData = childSnapshot.val();
+							 localStorage.setItem('loggedInUser', JSON.stringify(childData));
+							 localStorage.setItem('loggedInUserKey', key);
+
+							 userObj = JSON.parse(localStorage.getItem('loggedInUser'));
+					 		 loggedInUserKey = localStorage.getItem('loggedInUserKey');
+
+						 });
+
+					});
+
+					// SUCCESS
+					$("#profileStatusTxt").text("Info Updated!");
+					$("#profileStatusTxt").addClass("show");
+					$("#profileStatusTxt").addClass("greenTxt");
+					$("#profileStatusTxt").removeClass("redTxt");
+					$(".fa-exclamation-triangle").addClass("hide");
+
+				} else {
+
+					// ERROR
+					$("#profileStatusTxt").text("Please fill in your t-shirt size and dietary restriction!");
+					$("#profileStatusTxt").addClass("show");
+					$("#profileStatusTxt").addClass("redTxt");
+					$("#profileStatusTxt").removeClass("greenTxt");
+
+				}
 
 			}
 

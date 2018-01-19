@@ -35,6 +35,16 @@
   visibility: hidden;
 }
 
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled:hover,
+.disabled:focus {
+  opacity: 0.5 !important;
+}
+
 .pass-visibility {
   float: right;
   margin-right: 10px;

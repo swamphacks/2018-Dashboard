@@ -172,33 +172,31 @@
 
 									 var key = childSnapshot.key;
 									 var childData = childSnapshot.val();
-
-									 if (childData === null || childData === undefined) {
-
-										 confirmedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
-
-			 								 // Getting the info of the found user and storing it in local storage
-			 								 snapshot.forEach(function(childSnapshot) {
-
-			 									 var key = childSnapshot.key;
-			 									 var childData = childSnapshot.val();
-
-												 localStorage.setItem('loggedInUser', JSON.stringify(childData));
-												 localStorage.setItem('loggedInUserKey', key);
-
-			 								 });
-
-			 							});
-
-									 } else {
-
-										 localStorage.setItem('loggedInUser', JSON.stringify(childData));
-										 localStorage.setItem('loggedInUserKey', key);
-									 }
+									 localStorage.setItem('loggedInUser', JSON.stringify(childData));
+	 								 localStorage.setItem('loggedInUserKey', key);
 
 								 });
 
 							});
+
+							if (JSON.parse(localStorage.getItem('loggedInUser')) === null || JSON.parse(localStorage.getItem('loggedInUser')) === undefined) {
+
+								confirmedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+
+									// Getting the info of the found user and storing it in local storage
+									snapshot.forEach(function(childSnapshot) {
+
+										var key = childSnapshot.key;
+										var childData2 = childSnapshot.val();
+
+										localStorage.setItem('loggedInUser', JSON.stringify(childData2));
+										localStorage.setItem('loggedInUserKey', key);
+
+									});
+
+							 });
+
+							}
 
 							setTimeout(function() {
 
