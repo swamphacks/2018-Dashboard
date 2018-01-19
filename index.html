@@ -101,6 +101,10 @@
                       <a href="#" class="pure-menu-link" onclick="menuClick(5)">SH Stats</a>
                     </li>
 
+										<li id="op6" class="pure-menu-item top-ln hide">
+                      <a href="#" class="pure-menu-link" onclick="menuClick(6)">Send iOS Notif</a>
+                    </li>
+
                     <li id="op2" class="pure-menu-item top-ln">
                       <a href="#" class="pure-menu-link" onclick="menuClick(2)">Profile <i class="fa fa-exclamation-triangle" aria-hidden="true"></i></a>
                     </li>
@@ -233,6 +237,53 @@
 							<div class="col-md-12 top-margin">
 								<button class="button green" onclick="updateInfoBtnClicked()">
 									<p>Update Info</p>
+								</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+      </div>
+
+			<div id="notif" class="hide">
+
+        <h1 class="header-main-type">Send iOS Notif</h1>
+
+				<div class="container-fluid notif-con">
+					<div class="row">
+
+						<div class="row">
+							<form id="notifForm" class="" autocomplete="off">
+
+								<div class="col-md-12 top-margin">
+									<label class="form-lbl" for="q1" name="">Title</label>
+									<input class="form-field" id="notifTitle" name="q1" type="text" placeholder=""/>
+								</div>
+
+								<div class="col-md-12 top-margin">
+									<label class="form-lbl" for="q1" name="">Description</label>
+									<input class="form-field" id="notifDescription" name="q1" type="text" placeholder=""/>
+								</div>
+
+								<div class="col-md-12 top-margin">
+									<label class="form-lbl" for="q1" name="">Type</label>
+									<select class="form-field" id="notifType" required>
+									  <option value="food">Food</option>
+									  <option value="techtalk">Techtalk</option>
+									  <option value="social">Social</option>
+									  <option value="logistics">Logistics</option>
+									</select>
+								</div>
+
+							</form>
+
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 top-margin">
+								<button class="button green" onclick="sendNotifClicked()">
+									<p>Send</p>
 								</button>
 							</div>
 						</div>
@@ -510,6 +561,7 @@
 		var acceptedRef = ref.child("accepted");
 		var checkedInRef = ref.child("confirmed");
 		var eventsDataRef = ref.child("eventsData");
+		var notifRef = ref.child("announcements");
 		var userObj = JSON.parse(localStorage.getItem('loggedInUser'));
 		var loggedInUserKey = localStorage.getItem('loggedInUserKey');
 		var selected = 1;
@@ -539,6 +591,9 @@
 
 				$("#op5").removeClass("hide");
 				$("#op5").addClass("show");
+
+				$("#op6").removeClass("hide");
+				$("#op6").addClass("show");
 
 				getStats();
 				reloadStats();
@@ -810,6 +865,7 @@
         $("#op2").removeClass("pure-menu-selected");
         $("#op3").removeClass("pure-menu-selected");
 				$("#op5").removeClass("pure-menu-selected");
+				$("#op6").removeClass("pure-menu-selected");
 
         $("#dashboard").addClass("show");
         $("#dashboard").removeClass("hide");
@@ -819,6 +875,9 @@
 
         $("#login").addClass("hide");
         $("#login").removeClass("show");
+
+				$("#notif").addClass("hide");
+        $("#notif").removeClass("show");
 
 				if (userObj.status !== undefined) {
 
@@ -848,6 +907,7 @@
         $("#op3").removeClass("pure-menu-selected");
         $("#op1").removeClass("pure-menu-selected");
 				$("#op5").removeClass("pure-menu-selected");
+				$("#op6").removeClass("pure-menu-selected");
 
         $("#dashboard").addClass("hide");
         $("#dashboard").removeClass("show");
@@ -857,6 +917,9 @@
 
         $("#login").addClass("hide");
         $("#login").removeClass("show");
+
+				$("#notif").addClass("hide");
+        $("#notif").removeClass("show");
 
 				$("#userEmail").val(userObj.email);
 
@@ -892,6 +955,7 @@
 				$("#op5").addClass("pure-menu-selected");
         $("#op2").removeClass("pure-menu-selected");
         $("#op1").removeClass("pure-menu-selected");
+				$("#op6").removeClass("pure-menu-selected");
 
         $("#dashboard").addClass("hide");
         $("#dashboard").removeClass("show");
@@ -902,6 +966,9 @@
 				$("#login").addClass("show");
         $("#login").removeClass("hide");
 
+				$("#notif").addClass("hide");
+        $("#notif").removeClass("show");
+
 				appliedSchools = [];
 				schoolsAndCount = {};
 				topTenSchools = {};
@@ -909,6 +976,26 @@
 				getStats();
 				reloadStats();
 				checkAgainstList();
+
+			} else if (item === 6) {
+
+				$("#op6").addClass("pure-menu-selected");
+				$("#op2").removeClass("pure-menu-selected");
+				$("#op1").removeClass("pure-menu-selected");
+				$("#op3").removeClass("pure-menu-selected");
+				$("#op5").removeClass("pure-menu-selected");
+
+				$("#dashboard").addClass("hide");
+        $("#dashboard").removeClass("show");
+
+        $("#info").addClass("hide");
+        $("#info").removeClass("show");
+
+				$("#login").addClass("hide");
+        $("#login").removeClass("show");
+
+				$("#notif").addClass("show");
+        $("#notif").removeClass("hide");
 
 			}
     }
@@ -1146,6 +1233,10 @@
 
 				$("#headertxt").text("Stats");
 
+			} else if (selected == 6) {
+
+				$("#headertxt").text("Send iOS Notif");
+
 			}
 
 			if (scrollTop > (84 - 50)) {
@@ -1160,6 +1251,21 @@
 				$(".header-main-type").css("transform", "scale(1)");
 				$this.css("opacity", "0");
 			}
+		}
+
+		function sendNotifClicked() {
+
+			var title = $("#notifTitle").val();
+			var description = $("#notifDescription").val();
+			var type = $("#notifType").val();
+			var currentUnixTime = Math.round((new Date()).getTime() / 1000);
+
+			notifRef.push({
+				name: title,
+				description: description,
+				type: type,
+				time: currentUnixTime
+			});
 		}
 
 		$(document).ready(function () {
