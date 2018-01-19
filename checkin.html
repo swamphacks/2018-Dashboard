@@ -56,17 +56,22 @@
 
 					<div class="row log">
 						<form id="loginForm" class="" autocomplete="off">
+
+							<div class="col-md-12 top-margin">
+								<label class="form-lbl" for="q1" name="">Full Name</label>
+								<input class="form-field" id="fullname" name="q1" type="text" placeholder="" required/>
+							</div>
+
 							<div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Email</label>
 								<input class="form-field" id="email" name="q1" type="text" placeholder="" required/>
 							</div>
 
-							<div class="col-md-12 top-margin">
-								<!-- <label class="form-lbl" for="q1" name="">Password -<span class="underline-btn" onclick="resetPasswordClicked()">Forgot?</span></label> -->
+							<!-- <div class="col-md-12 top-margin">
 								<label class="form-lbl" for="q1" name="">Password</label>
 								<i class="fa fa-lock pass-visibility" aria-hidden="true" id="pv3" onclick="showPassPressed(password, pv3)"></i>
 								<input class="form-field" id="password" name="q1" type="password" placeholder="" required/>
-							</div>
+							</div> -->
 
 							<div class="col-md-12 top-margin">
 								<button id="loginBtnCheckIn" class="button green" onclick="loginBtnClicked()"><a href=""><p class="loginbtn">Check In</p></a></button>
@@ -101,6 +106,10 @@
 				<!-- <img class="clock" src="img/clock.jpg"></img> -->
 				<!-- <div class="imgcon">
 					<img class="colorlogo" src="img/colorlogo.svg"></img>
+				</div> -->
+
+				<!-- <div id="table-con">
+
 				</div> -->
 
 				<div class="top-blk">
@@ -205,140 +214,106 @@
     function loginBtnClicked() {
 
 			var email = $("#email").val();
-			var password = $("#password").val();
+			var fullName = $("#fullname").val();
 
-			if (email !== "" && password !== "") {
+			if (email !== "" && fullName !== "") {
 
 				// Show the loader
 				$("#animationWindow").removeClass("hide");
 				$("#animationWindow").addClass("showflex");
 
-				// Login user
-				firebase.auth().signInWithEmailAndPassword(email, password).then(function(user) {
-					 // User signed in
+				var delay = 5000;
+				var smallDelay = 500;
 
-					 var delay = 5000;
-					 var smallDelay = 500;
+				 setTimeout(function() {
+					 // Delay before checking
+					 acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-						setTimeout(function() {
-							// Delay before checking
-							acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+							// Getting the info of the found user and storing it in local storage
+							snapshot.forEach(function(childSnapshot) {
 
-								 // Getting the info of the found user and storing it in local storage
-								 snapshot.forEach(function(childSnapshot) {
+								var key = childSnapshot.key;
+								var childData = childSnapshot.val();
 
-									 var key = childSnapshot.key;
-									 var childData = childSnapshot.val();
+								localStorage.setItem('checkedInUser', JSON.stringify(childData));
+								localStorage.setItem('checkedInUserKey', key);
 
-									 localStorage.setItem('checkedInUser', JSON.stringify(childData));
-									 localStorage.setItem('checkedInUserKey', key);
-
-									 checkedInUser = childData;
-
-								 });
+								checkedInUser = childData;
 
 							});
 
-							if (JSON.parse(localStorage.getItem('checkedInUser')) !== undefined) {
+					 });
 
-								checkedInRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+					 setTimeout(function() {
 
-									 // Getting the info of the found user and storing it in local storage
+						 if (checkedInUser !== undefined) {
 
-									 if (snapshot.val() === null || snapshot.val() === undefined) {
+							 checkedInRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
 
-										 // SUCCESS
-										$("#loginStatusTxt").text("Checked in!");
-										$("#loginStatusTxt").addClass("show");
+									// Getting the info of the found user and storing it in local storage
 
-										clickedBtn === true;
+									if (snapshot.val() === null || snapshot.val() === undefined) {
 
-										var pushKey = checkedInRef.push().key;
-										
-										checkedInRef.update({
-											 [pushKey] : checkedInUser
-										});
+										// SUCCESS
+										var checkIn = "Checked in ";
+									 $("#loginStatusTxt").text(checkIn.concat(checkedInUser.fname).concat("!"));
+									 $("#loginStatusTxt").addClass("show");
 
-										setTimeout(function() {
+									 clickedBtn === true;
 
-											// Reload form for next check in
-											location.reload();
+									 setTimeout(function() {
 
-										}, delay);
+										 var pushKey = checkedInRef.push().key;
 
-									} else {
+										 checkedInRef.update({
+												[pushKey] : checkedInUser
+										 });
 
-										// Already checked in
-										$("#loginStatusTxt").text("Checked in!");
-										$("#loginStatusTxt").addClass("show");
-									}
+										 // Reload form for next check in
+										 location.reload();
 
-								});
+									 }, delay);
 
-							} else {
-							}
+								 } else {
 
-							// Hide the loader
-							$("#animationWindow").removeClass("showflex");
-							$("#animationWindow").addClass("hide");
+									 // Already checked in
+									 var checkIn = "Checked in ";
+									 //$("#loginStatusTxt").text(checkIn.concat(checkedInUser.fname).concat("!"));
+									 $("#loginStatusTxt").text("Already checked in!");
+									 $("#loginStatusTxt").addClass("show");
 
-						}, smallDelay);
+									 setTimeout(function() {
 
-				}).catch(function(error) {
+										 // Reload form for next check in
+										 location.reload();
 
-					// Hide the loader
-					$("#animationWindow").removeClass("showflex");
-					$("#animationWindow").addClass("hide");
+									 }, delay);
 
-						var errorCode = error.code;
-						var errorMessage = error.message;
+								 }
 
-						if (errorCode.includes("auth/wrong-password")) {
+							 });
 
-							$("#loginStatusTxt").text("Wrong password!");
-							$("#loginStatusTxt").addClass("show");
+						 } else {
 
-							$(".btngroup").addClass("hide");
-							$(".btngroup").removeClass("show");
+							 $("#loginStatusTxt").text("That info is not in our system.");
+							 $("#loginStatusTxt").addClass("show");
 
-						} else if (errorCode.includes("weak-password")) {
+							 setTimeout(function() {
 
-							// ERROR
-							$("#loginStatusTxt").text("Password should be at least 6 characters!");
-							$("#loginStatusTxt").addClass("show");
+								 // Reload form for next check in
+								 location.reload();
 
-							$(".btngroup").addClass("hide");
-							$(".btngroup").removeClass("show");
+							 }, delay);
 
-						} else if (errorCode.includes("email-already-in-use")) {
+						 }
 
-							// ERROR
-							$("#loginStatusTxt").text("Email already in use!");
-							$("#loginStatusTxt").addClass("show");
+						 // Hide the loader
+						 $("#animationWindow").removeClass("showflex");
+						 $("#animationWindow").addClass("hide");
 
-							$(".btngroup").addClass("hide");
-							$(".btngroup").removeClass("show");
+					 }, 1000);
 
-						} else if (errorCode.includes("invalid-email")) {
-
-							// ERROR
-							$("#loginStatusTxt").text("Invalid email!");
-							$("#loginStatusTxt").addClass("show");
-
-							$(".btngroup").addClass("hide");
-							$(".btngroup").removeClass("show");
-
-						} else {
-
-							// ERROR
-							$("#loginStatusTxt").text("Unknown error logging in. Wrong email?");
-							$("#loginStatusTxt").addClass("show");
-
-							$(".btngroup").addClass("hide");
-							$(".btngroup").removeClass("show");
-						}
-
-				});
+				 }, smallDelay);
 
 			} else {
 
@@ -352,126 +327,21 @@
 
 		}
 
-		function resetPasswordClicked() {
-
-			var email = $("#email").val();
-
-			firebase.auth().sendPasswordResetEmail(email).then(function() {
-	      // Password reset email sent.
-
-				$("#loginStatusTxt").text("Reset password email sent! Check your inbox.");
-				$("#loginStatusTxt").addClass("show");
-
-	    }).catch(function(error) {
-	      // Error occurred. Inspect error.code.
-
-				var errorCode = error.code;
-				var errorMessage = error.message;
-
-				if (errorCode.includes("auth/invalid-email")) {
-
-					$("#loginStatusTxt").text("Please provide a valid email below!");
-					$("#loginStatusTxt").addClass("show");
-
-				} else if (errorCode.includes("auth/user-not-found")) {
-
-					$("#loginStatusTxt").text("There is no user associated with that email, did you create an account?");
-					$("#loginStatusTxt").addClass("show");
-
-				} else {
-
-					$("#loginStatusTxt").text("Error sending reset password email.");
-					$("#loginStatusTxt").addClass("show");
-
-				}
-
-	    });
-
-		}
-
-		function resendEmailClicked() {
-
-			firebase.auth().onAuthStateChanged(function(user) {
-
-				if (!user.emailVerified) {
-					user.sendEmailVerification();
-					$("#resendBtn").text("Email Sent!");
-					$("#resendBtn").addClass("disabled");
-
-				} else {
-					$("#resendBtn").text("Already Verified!");
-					$("#resendBtn").addClass("disabled");
-				}
-
-			});
-
-		}
-
-		function checkIfUserExists(email) {
-
-			var cD;
-			var k;
-
-			acceptedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
-
-				 snapshot.forEach(function(childSnapshot) {
-
-					 var key = childSnapshot.key;
-					 var childData = childSnapshot.val();
-					 cD = childData;
-					 k = key;
-
-				 });
-
-			});
-
-			if (cD !== undefined) {
-
-			 localStorage.setItem('loggedInUser', JSON.stringify(cD));
-			 localStorage.setItem('loggedInUserKey', k);
-
-			 return true;
-
-		 } else if (cD === undefined) {
-
-			 return false;
-
-		 } else {
-
-			 return false;
-		 }
-
-		}
-
-		function showPassPressed(field, icon) {
-
-			if (field.type === "password") {
-				field.type = "text";
-				$(icon).removeClass("fa-lock");
-				$(icon).addClass("fa-unlock-alt");
-			} else {
-				field.type = "password";
-				$(icon).addClass("fa-lock");
-				$(icon).removeClass("fa-unlock-alt");
-			}
-
-		}
-
 		var points = {
 
-			gators: 200,
-			dragonflies: 200,
-			turtles: 200,
-			herons: 200
+			gators: 0,
+			dragonflies: 0,
+			turtles: 0,
+			herons: 0
 
 		}
 
 		var people = {
 
-			gators: 20,
-			dragonflies: 20,
-			turtles: 20,
-			herons: 20
+			gators: 0,
+			dragonflies: 0,
+			turtles: 0,
+			herons: 0
 
 		}
 
@@ -583,6 +453,41 @@
 
 			});
 
+		}
+
+		function generate_table() {
+		  // get the reference for the body
+		  var body = document.getElementById("table-con")
+
+		  // creates a <table> element and a <tbody> element
+		  var tbl = document.createElement("table");
+		  var tblBody = document.createElement("tbody");
+
+			acceptedRef.once("value", function(data) {
+
+				data.forEach(function(child){
+					// creates a table row
+					var row = document.createElement("tr");
+
+					var cell = document.createElement("td");
+					var cellText = document.createTextNode(child.val().email);
+
+					cell.appendChild(cellText);
+					row.appendChild(cell);
+
+					// add the row to the end of the table body
+					tblBody.appendChild(row);
+    		});
+
+			});
+
+		  // put the <tbody> in the <table>
+		  tbl.appendChild(tblBody);
+		  // appends <table> into <body>
+		  body.appendChild(tbl);
+		  // sets the border attribute of tbl to 2;
+		  tbl.setAttribute("border", "none");
+		  tbl.setAttribute("width", "100%");
 		}
 
   </script>

@@ -1382,3 +1382,30 @@ td b {
   }
 
 }
+
+#test-body {
+  height: 100%;
+  width: 100%;
+  background: blue;
+}
+
+#table-con {
+  width: 300px;
+  background: red;
+  z-index: 10000000;
+  overflow: scroll;
+}
+
+#table-con table {
+  border: none !important;
+}
+
+#table-con td {
+  padding: 6px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: green !important;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
