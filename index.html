@@ -221,6 +221,11 @@
 									<input class="form-field" id="userEmail" name="q1" type="text" placeholder="" disabled/>
 								</div>
 
+								<div class="col-md-12 top-margin" id="teamCol">
+									<label class="form-lbl" for="q1" name="">Your Team</label>
+									<input class="form-field" id="userTeam" name="q1" type="text" placeholder="" disabled/>
+								</div>
+
 							</form>
 
 						</div>
@@ -648,7 +653,15 @@
 
 		$("#welcomeMessage").text("Welcome, " + userObj.fname + "!");
 		$("#userEmail").val(userObj.email);
+
+		if (userObj.team !== null || userObj.team !== undefined) {
+			$("#userTeam").val(userObj.team);
+		} else {
+			$("#teamCol").addClass("hide");
+		}
+
 		document.getElementById("userEmail").disabled = true;
+		document.getElementById("userTeam").disabled = true;
 
 		if (userObj.dietaryRestriction !== undefined || userObj.tshirtSize !== undefined) {
 			$(".fa-exclamation-triangle").addClass("hide");
