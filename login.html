@@ -142,6 +142,7 @@
 		var ref = firebase.database().ref();
 		var usersRef = ref.child("applicants");
 		var acceptedRef = ref.child("accepted");
+		var confirmedRef = ref.child("confirmed");
 		$("form").submit(function() { return false; });
 
     function loginBtnClicked() {
@@ -172,8 +173,27 @@
 									 var key = childSnapshot.key;
 									 var childData = childSnapshot.val();
 
-									 localStorage.setItem('loggedInUser', JSON.stringify(childData));
-									 localStorage.setItem('loggedInUserKey', key);
+									 if (childData === null || childData === undefined) {
+
+										 confirmedRef.orderByChild("email").equalTo(email).on("value", function(snapshot) {
+
+			 								 // Getting the info of the found user and storing it in local storage
+			 								 snapshot.forEach(function(childSnapshot) {
+
+			 									 var key = childSnapshot.key;
+			 									 var childData = childSnapshot.val();
+
+												 localStorage.setItem('loggedInUser', JSON.stringify(childData));
+												 localStorage.setItem('loggedInUserKey', key);
+
+			 								 });
+
+			 							});
+
+									 } else {
+										 localStorage.setItem('loggedInUser', JSON.stringify(childData));
+										 localStorage.setItem('loggedInUserKey', key);
+									 }
 
 								 });
 
