@@ -172,6 +172,7 @@
 
 									 var key = childSnapshot.key;
 									 var childData = childSnapshot.val();
+									 console.log(childData);
 
 									 if (childData === null || childData === undefined) {
 
@@ -185,7 +186,7 @@
 
 												 localStorage.setItem('loggedInUser', JSON.stringify(childData));
 												 localStorage.setItem('loggedInUserKey', key);
-												 console.log(key);
+												 console.log(childData);
 
 			 								 });
 
@@ -204,6 +205,10 @@
 							setTimeout(function() {
 
 								//window.location.href = "index.html";
+								
+								// Hide the loader
+								$("#animationWindow").removeClass("showflex");
+								$("#animationWindow").addClass("hide");
 
 							}, delay);
 
