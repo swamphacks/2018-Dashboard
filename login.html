@@ -179,33 +179,11 @@
 
 							});
 
-							firebase.auth().onAuthStateChanged(function(user) {
+							setTimeout(function() {
 
-								if (user.emailVerified) {
+								window.location.href = "index.html";
 
-									setTimeout(function() {
-
-										window.location.href = "index.html";
-
-									}, delay);
-
-
-								} else if (!user.emailVerified) {
-
-									// Hide the loader
-									$("#animationWindow").removeClass("showflex");
-									$("#animationWindow").addClass("hide");
-
-									// ERROR
-									$("#statusWithBtn").text("Email not verified! Check your inbox, it could take up to 10 minutes.");
-									$(".btngroup").addClass("show");
-
-									$("#loginStatusTxt").addClass("hide");
-									$("#loginStatusTxt").removeClass("show");
-
-								}
-
-							});
+							}, delay);
 
 						}, delay);
 
